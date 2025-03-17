@@ -1,0 +1,26 @@
+.ratingInput {
+    display: inline-block;
+}
+
+.ratingInput input {
+    display: none
+}
+
+.ratingInput label {
+    float: right;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.ratingInput label:before {
+    content: "\2605";
+    font-size: 35px;
+}
+
+.ratingInput input:checked ~ label,
+.ratingInput label:hover,
+.ratingInput label:hover ~ label {
+    color: #ffd700;
+    transition: color 0.3s;
+}
+  

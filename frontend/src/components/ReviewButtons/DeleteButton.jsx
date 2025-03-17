@@ -1,9 +1,10 @@
 import React from "react";
 import './DeleteButton.css'
 
-function DeleteButton () {
+function DeleteButton (props) {
     return (
-        <button className="deleteButton">Delete</button>
+        <button className="deleteButton" onClick={() => { props.onPressDelete(props.reviewID); }}>
+            Delete</button>
     );
 };
 

@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300;400;500;600;700&display=swap');
+
+.addButton {
+    height: 35px;
+    width: 180px;
+    transition: all 0.3s ease-out;
+    padding: 4px 7px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: rgb(152, 57, 246);
+    font-family: 'Zilla Slab', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.addButton:hover {
+    background-color: #5353ff;
+    color: #ffffff;
+    transform: translate(1px, -1px);
+}
+
+.addButton:active {
+    transform: scale(0.99);
+}

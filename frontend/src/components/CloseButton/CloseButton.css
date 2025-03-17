@@ -1,0 +1,37 @@
+.closeBtn {
+	position: absolute;
+	margin-top: -10%;
+	margin-left: 95%;
+	overflow: hidden;
+	border: none;
+	padding: 0;
+	width: 50px; 
+	height: 50px;
+	border-radius: 50%;
+	background: transparent;
+	color: #b50000;
+	font: inherit;
+	text-indent: 100%;
+	cursor: pointer;
+	
+	&:focus {
+		outline: solid 0 transparent;
+		box-shadow: 0 0 0 2px #8ed0f9
+	}
+	
+	&:hover {
+		background: rgba(51, 0, 254, 0.1)
+	}
+	
+	&:before, &:after {
+		position: absolute;
+		top: 15%; left: calc(50% - .0625em);
+		width: .125em; height: 70%;
+		border-radius: .125em;
+		transform: rotate(45deg);
+		background: currentcolor;
+		content: ''
+	}
+	
+	&:after { transform: rotate(-45deg); }
+}
