@@ -5,19 +5,28 @@ import InputStars from "../Stars/InputStars";
 import AddFormButton from "../AddButton/AddFormButton";
 
 function AddForm (props) {
-    const [enteredTitle, setEnteredTitle] = useState('');
-    const [enteredBody, setEnteredBody] = useState('');
+    const [formData, setFormData] = useState({title: "", body: "", rating: ""});
+    const [errors, setErrors] = useState({title: "", body: "", rating: ""});
 
-    function titleChangeHandler (event) {
-        setEnteredTitle(event.target.value);
-    }
-
-    function bodyChangeHandler (event) {
-        setEnteredBody(event.target.value);
+    function changeHandler (event) {
+        const { name, value } = event.target; 
+        setFormData({...formData, [name]: value});
+        setErrors({...errors, [name]: ""});
     }
 
     function pressAddHandler () {
-        props.onPressAddReviewButton(enteredTitle, enteredBody);
+        let newErrors = {};
+        if (!formData.title.trim()) newErrors.title = "Title is required.";
+        if (!formData.body.trim()) newErrors.body = "Review Body is required.";
+        if (!formData.rating) newErrors.rating = "Rating is required.";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        }
+        else {
+            props.setIsAddOpen(false);
+            props.onPressAddReviewButton(formData.title, formData.body, formData.rating);
+        }
     };
 
     
@@ -26,28 +35,31 @@ function AddForm (props) {
             <div className="formHeader">
                 <h1>Add a review</h1>
             </div>
-            <CloseButton setIsOpen = {props.setIsOpen}/>
+            <CloseButton setIsOpen = {props.setIsAddOpen}/>
             <div className="formBody">
                 <div className="inputTitle">
                     <label>Game's Title:</label>
-                    <input type="text" required="" autocomplete="off" placeholder="Game's Title"
-                        value={enteredTitle} onChange={titleChangeHandler}/>
+                    <input type="text" name="title" autoComplete="off" placeholder="Game's Title"
+                        value={formData.title} onChange={changeHandler}/>
+                    {errors.title && <span style={{ color: "red", fontSize: "15px"}}>{errors.title}</span>}
                 </div>
                 
                 <div className="inputReview">
-                    <label for="review">Review Body:</label>
+                    <label>Review Body:</label>
                     {/* i could use textarea here */}
-                    <input type="text" required="" autocomplete="off" placeholder="Write your review"
-                        value={enteredBody} onChange={bodyChangeHandler}/>
+                    <input type="text" name="body" autoComplete="off" placeholder="Write your review"
+                        value={formData.body} onChange={changeHandler}/>
+                    {errors.body && <span style={{ color: "red", fontSize: "15px" }}>{errors.body}</span>}
                 </div>
 
                 <div className="inputRating">
-                    <label for="rating">Rating:</label>
-                    <InputStars className="inputStars"/>
+                    <label>Rating:</label>
+                    <InputStars name = "rating" onChange = {changeHandler} className="inputStars"/>
+                    {errors.rating && <span style={{ color: "red", fontSize: "15px" }}>{errors.rating}</span>}
                 </div>
 
-                <AddFormButton setIsOpen={props.setIsOpen} onPressAdd={pressAddHandler} 
-                    title = {enteredTitle} body = {enteredBody} />
+                <AddFormButton onPressAdd={pressAddHandler} 
+                    title = {formData.title} body = {formData.body} />
             </div>
         </div>
     );

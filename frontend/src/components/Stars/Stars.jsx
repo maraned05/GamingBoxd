@@ -1,19 +1,19 @@
 import React from "react";
 import './Stars.css'
 
-function Stars () {
+function Stars ({value, reviewID}) {
     return (
-    <div className="rating">
-        <input type="radio" id="star5" name="rating" value="5" />
-        <label htmlFor="star5"></label>
-        <input type="radio" id="star4" name="rating" value="4" />
-        <label htmlFor="star4"></label>
-        <input type="radio" id="star3" name="rating" value="3" />
-        <label htmlFor="star3"></label>
-        <input type="radio" id="star2" name="rating" value="2" />
-        <label htmlFor="star2"></label>
-        <input type="radio" id="star1" name="rating" value="1" />
-        <label htmlFor="star1"></label>
+    <div className="ratingStars">
+        <input type="radio" id={`star5-${reviewID}`} name={`rating-${reviewID}`} value="5" checked={value === "5"} readOnly/>
+        <label htmlFor={`star5-${reviewID}`}></label>
+        <input type="radio" id={`star4-${reviewID}`} name={`rating-${reviewID}`} value="4" checked={value=== "4"} readOnly/>
+        <label htmlFor={`star4-${reviewID}`}></label>
+        <input type="radio" id={`star3-${reviewID}`} name={`rating-${reviewID}`} value="3" checked={value === "3"} readOnly/>
+        <label htmlFor={`star3-${reviewID}`}></label>
+        <input type="radio" id={`star2-${reviewID}`} name={`rating-${reviewID}`} value="2" checked={value === "2"} readOnly/>
+        <label htmlFor={`star2-${reviewID}`}></label>
+        <input type="radio" id={`star1-${reviewID}`} name={`rating-${reviewID}`} value="1" checked={value === "1"} readOnly/>
+        <label htmlFor={`star1-${reviewID}`}></label>
     </div>
     );
 };

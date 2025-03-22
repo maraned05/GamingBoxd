@@ -1,9 +1,10 @@
 import React from "react";
 import './EditButton.css'
 
-function EditButton () {
+function EditButton (props) {
     return (
-        <button className="editButton">Edit</button>
+        <button className="editButton" onClick={() => { props.onPressEdit(props.reviewData); }}>
+            Edit</button>
     );
 };
 

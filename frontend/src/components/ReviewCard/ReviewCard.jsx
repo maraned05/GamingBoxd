@@ -6,12 +6,12 @@ import DeleteButton from "../ReviewButtons/DeleteButton";
 
 function ReviewCard (props) {
     return (
-        <div className="reviewCard" id={props.id}>
-            <p className="title">{props.title}</p>
-            <p className="body">{props.body}</p>
-            <EditButton />
-            <DeleteButton onPressDelete = {props.onDelete} reviewID = {props.id} />  
-            <Stars className="stars" />
+        <div className="reviewCard">
+            <p className="title">{props.review.title}</p>
+            <p className="body">{props.review.body}</p>
+            <EditButton onPressEdit = {props.onEdit} reviewData = {props.review} />
+            <DeleteButton onPressDelete = {props.onDelete} reviewID = {props.review.id} />  
+            <Stars value = {props.review.rating} reviewID = {props.review.id} className="stars" />
         </div>
     );
 };
