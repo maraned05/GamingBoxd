@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './AddForm.css'
 import CloseButton from "../CloseButton/CloseButton";
 import InputStars from "../Stars/InputStars";
-import AddFormButton from "../AddButton/AddFormButton";
+import AddFormButton from "./AddFormButton";
 
 function AddForm (props) {
     const [formData, setFormData] = useState({title: "", body: "", rating: ""});

@@ -4,10 +4,12 @@ import './MainPage.css'
 import Header from "../components/Header/Header";
 import SearchBar from "../components/SearchBar/SearchBar";
 import FilterButton from "../components/FilterButton/FilterButton";
-import AddButton from "../components/AddButton/AddButton";
+import AddReviewButton from "../components/ControlsButtons/AddReviewButton";
 import ReviewCard from "../components/ReviewCard/ReviewCard";
 import AddForm from "../components/AddForm/AddForm"
 import EditForm from "../components/EditForm/EditForm"
+import Pagination from "../components/Pagination/Pagination";
+import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsButton";
 
 function MainPage () {
     const [reviews, setReviews] = useState([]);
@@ -16,6 +18,22 @@ function MainPage () {
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
     const [shownReviews, setShownReviews] = useState([]);
+    const [lowestRating, setLowestRating] = useState(null);
+    const [highestRating, setHighestRating] = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const reviewsPerPage = 8;
+    // const [indexOfLastReview, setIndexOfLastReview] = useState(8);
+    // const [indexOfFirstReview, setIndexOfFirstReview] = useState(0);
+    // const [currentReviews, setCurrentReviews] = useState(shownReviews.slice(indexOfFirstReview, indexOfLastReview));
+
+    const indexOfLastReview = currentPage * reviewsPerPage;
+    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    const currentReviews = shownReviews.slice(indexOfFirstReview, indexOfLastReview);
+
+    function paginate (pageNumber) {
+        setCurrentPage(pageNumber);
+    }
 
     function pressAddReviewButtonHandler (reviewTitle, reviewBody, starsRating) {
         const newReview = {
@@ -24,6 +42,20 @@ function MainPage () {
             rating: starsRating,
             id: crypto.randomUUID()
         };
+        console.log(typeof newReview.rating);
+
+        if (highestRating === null && lowestRating === null) {
+            setLowestRating(starsRating);
+            setHighestRating(starsRating);
+        }
+        else {
+            if (starsRating < lowestRating) 
+                setLowestRating(starsRating);
+    
+            if (starsRating > highestRating) 
+                setHighestRating(starsRating);
+        }
+        console.log(highestRating, lowestRating);
 
         setReviews(prevReviews => {
             const updatedReviews = [...prevReviews, newReview];
@@ -79,21 +111,48 @@ function MainPage () {
         });
     }
 
+    function openStatisticsPage () {
+        window.open("/statistics", "_blank");
+    }
+
     return (
         <div>
             <Header />
             <div className="mainBody">
                 <div className="controlsBar">
-                    <SearchBar onChange = {searchHandler}/>
-                    <FilterButton onChange = {sortingHandler}/>
-                    <AddButton setIsOpen = {setIsAddOpen}/>
+                    <div className="leftControls">
+                        <SearchBar onChange = {searchHandler}/>
+                        <FilterButton onChange = {sortingHandler}/>
+                    </div>
+                    <div className="rightControls">
+                        <OpenStatisticsButton onClick = {openStatisticsPage}/>
+                        <AddReviewButton setIsOpen = {setIsAddOpen}/>
+                    </div>
                 </div>
                 <div className="reviewsGrid">  
                     {
-                        shownReviews.map(r => (<ReviewCard key = {r.id} review = {r} 
-                            onDelete = {deleteHandler} onEdit = {editHandler} />))
+                        // shownReviews.map((r) => ( r.rating === highestRating ?
+                        //     <ReviewCard key = {r.id} review = {r} 
+                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "highest" />
+                        //     :
+                        //     r.rating === lowestRating ?
+                        //     <ReviewCard key = {r.id} review = {r} 
+                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "lowest"/>
+                        //     :
+                        //     <ReviewCard key = {r.id} review = {r} 
+                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "average" />
+                        // ))
+
+                        currentReviews.map((r) => (
+                            <ReviewCard key = {r.id} review = {r} 
+                            onDelete = {deleteHandler} onEdit = {editHandler} 
+                            rank = {(r.rating === highestRating && reviews.length > 1) ? "highest" : 
+                                    (r.rating === lowestRating && reviews.length > 1) ? "lowest" 
+                                    : "average"} />
+                        ))
                     }
                 </div>
+                <Pagination reviewsPerPage = {reviewsPerPage} totalReviews = {shownReviews.length} paginate = {paginate} />
             </div>
 
             { isAddOpen &&

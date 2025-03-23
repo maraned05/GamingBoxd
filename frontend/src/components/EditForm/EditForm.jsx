@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './EditForm.css'
 import CloseButton from "../CloseButton/CloseButton";
 import InputStars from "../Stars/InputStars";
-import AddFormButton from "../AddButton/AddFormButton";
+import AddFormButton from "../AddForm/AddFormButton";
 
 function EditForm (props) {
     const [formData, setFormData] = useState({title: props.reviewData.title, body: props.reviewData.body, 

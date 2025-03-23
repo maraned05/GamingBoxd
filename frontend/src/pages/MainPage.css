@@ -17,19 +17,40 @@
     width: 100%;
     padding: 0px 80px;
     position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftControls, .rightControls {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    column-gap: 30px;
+}
+
+.leftControls {
+    justify-content: start;
+}
+
+.rightControls {
+    justify-content: end;
 }
 
 .reviewsGrid {
     position: absolute;
     top: 150px;
-    height: 70%;
+    height: 60%;
     width: 100%;
-
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 1fr 1fr;
+    /* grid-template-rows: repeat(auto-fill); */
+    /* overflow: scroll; */
     justify-content: space-evenly;
     align-content: space-evenly;
     justify-items: center;
     align-items: center;
+    row-gap: 40px;
 }

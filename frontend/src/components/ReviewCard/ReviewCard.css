@@ -4,7 +4,7 @@
     position: relative;
     width: 254px;
     height: 190px;
-    background-color: #eeeeff;
+    background-color: #fff1ee;
     padding: 12px;
     border-radius: 8px;
     color: black;
@@ -67,4 +67,12 @@ p.body {
 .stars {
   grid-column: 3 / 4;
   grid-row: 3 / 4;
+}
+
+.highRating {
+  background-color: #bffdc2;
+}
+
+.lowRating {
+  background-color: #f79d9c;
 }

@@ -37,18 +37,19 @@ app.get('/products', (req, res, next) => {
 });
 
 app.post('/product', (req, res, next) => {
-  const { title, price } = req.body;
+  const { title, body, rating } = req.body;
 
-  if (!title || title.trim().length === 0 || !price || price <= 0) {
+  if (!title || title.trim().length === 0 || !body || body.trim().length === 0 || !rating || rating.trim().length === 0) {
     return res.status(422).json({
       message: 'Invalid input, please enter a valid title and price.'
     });
   }
 
   const createdProduct = {
+    title: title,
+    body: body,
+    rating: rating,
     id: uuidv4(),
-    title,
-    price
   };
 
   DUMMY_PRODUCTS.push(createdProduct);
