@@ -6,7 +6,7 @@ import AddFormButton from "../AddForm/AddFormButton";
 
 function EditForm (props) {
     const [formData, setFormData] = useState({title: props.reviewData.title, body: props.reviewData.body, 
-        rating: props.reviewData.rating, id: props.reviewData.id});
+        rating: props.reviewData.rating, date: props.reviewData.date, id: props.reviewData.id});
     const [errors, setErrors] = useState({title: "", body: "", rating: ""});
 
     function changeHandler (event) {
@@ -21,6 +21,7 @@ function EditForm (props) {
         if (!formData.title.trim()) newErrors.title = "Title is required.";
         if (!formData.body.trim()) newErrors.body = "Review Body is required.";
         if (!formData.rating) newErrors.rating = "Rating is required.";
+        if (!formData.date.trim()) newErrors.date = "Date is required.";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -58,6 +59,12 @@ function EditForm (props) {
                     <label>Rating:</label>
                     <InputStars name = "rating" onChange = {changeHandler} className="inputStars"/>
                     {errors.rating && <span style={{ color: "red", fontSize: "15px" }}>{errors.rating}</span>}
+                </div>
+
+                <div className="inputDate">
+                    <label>Date:</label>
+                    <input type="date" name="date" value={formData.date} onChange = {changeHandler} ></input>
+                    {errors.date && <span style={{ color: "red", fontSize: "15px" }}>{errors.date}</span>}
                 </div>
 
                 <AddFormButton onPressAdd={pressAddHandler} 

@@ -5,8 +5,8 @@ import InputStars from "../Stars/InputStars";
 import AddFormButton from "./AddFormButton";
 
 function AddForm (props) {
-    const [formData, setFormData] = useState({title: "", body: "", rating: ""});
-    const [errors, setErrors] = useState({title: "", body: "", rating: ""});
+    const [formData, setFormData] = useState({title: "", body: "", rating: "", date: ""});
+    const [errors, setErrors] = useState({title: "", body: "", rating: "", date: ""});
 
     function changeHandler (event) {
         const { name, value } = event.target; 
@@ -19,13 +19,14 @@ function AddForm (props) {
         if (!formData.title.trim()) newErrors.title = "Title is required.";
         if (!formData.body.trim()) newErrors.body = "Review Body is required.";
         if (!formData.rating) newErrors.rating = "Rating is required.";
+        if (!formData.date.trim()) newErrors.date = "Date is required.";
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         }
         else {
             props.setIsAddOpen(false);
-            props.onPressAddReviewButton(formData.title, formData.body, formData.rating);
+            props.onPressAddReviewButton(formData.title, formData.body, formData.rating, formData.date);
         }
     };
 
@@ -58,10 +59,11 @@ function AddForm (props) {
                     {errors.rating && <span style={{ color: "red", fontSize: "15px" }}>{errors.rating}</span>}
                 </div>
 
-                {/* <div className="inputDate">
+                <div className="inputDate">
                     <label>Date:</label>
-                    <input type="date"></input>
-                </div> */}
+                    <input type="date" name="date" value={formData.date} onChange = {changeHandler} ></input>
+                    {errors.date && <span style={{ color: "red", fontSize: "15px" }}>{errors.date}</span>}
+                </div>
 
                 <AddFormButton onPressAdd={pressAddHandler} 
                     title = {formData.title} body = {formData.body} />

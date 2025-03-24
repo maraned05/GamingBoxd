@@ -36,11 +36,12 @@ function MainPage () {
         setCurrentPage(pageNumber);
     }
 
-    function pressAddReviewButtonHandler (reviewTitle, reviewBody, starsRating) {
+    function pressAddReviewButtonHandler (reviewTitle, reviewBody, starsRating, reviewDate) {
         const newReview = {
             title: reviewTitle,
             body: reviewBody,
             rating: starsRating,
+            date: reviewDate,
             id: crypto.randomUUID()
         };
 
@@ -66,7 +67,8 @@ function MainPage () {
     function pressEditReviewButtonHandler (newReviewData) {
         setReviews((prevReviews) => {
             const updatedReviews = prevReviews.map((review) => review.id === newReviewData.id ? 
-            {title: newReviewData.title, body: newReviewData.body, rating: newReviewData.rating, id: newReviewData.id} : review )
+            {title: newReviewData.title, body: newReviewData.body, rating: newReviewData.rating, date: newReviewData.date, 
+             id: newReviewData.id} : review )
             setShownReviews(updatedReviews);
             return updatedReviews;
             }

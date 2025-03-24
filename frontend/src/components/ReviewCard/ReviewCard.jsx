@@ -7,6 +7,7 @@ import DeleteButton from "../ReviewButtons/DeleteButton";
 function ReviewCard (props) {
     return (
         <div className = {props.rank === "highest" ? "reviewCard highRating" : props.rank === "lowest" ? "reviewCard lowRating" : "reviewCard averageRating"}>
+            <p className="dateAdded">{`Date added: ${props.review.date}`}</p>
             <p className="title">{props.review.title}</p>
             <p className="body">{props.review.body}</p>
             <EditButton onPressEdit = {props.onEdit} reviewData = {props.review} />
