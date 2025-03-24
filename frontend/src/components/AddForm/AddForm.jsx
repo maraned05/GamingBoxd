@@ -58,6 +58,11 @@ function AddForm (props) {
                     {errors.rating && <span style={{ color: "red", fontSize: "15px" }}>{errors.rating}</span>}
                 </div>
 
+                {/* <div className="inputDate">
+                    <label>Date:</label>
+                    <input type="date"></input>
+                </div> */}
+
                 <AddFormButton onPressAdd={pressAddHandler} 
                     title = {formData.title} body = {formData.body} />
             </div>

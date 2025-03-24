@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import './MainPage.css'
 import Header from "../components/Header/Header";
@@ -20,6 +20,7 @@ function MainPage () {
     const [shownReviews, setShownReviews] = useState([]);
     const [lowestRating, setLowestRating] = useState(null);
     const [highestRating, setHighestRating] = useState(null);
+    const [statisticsTab, setStatisticsTab] = useState(null);
 
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 8;
@@ -42,7 +43,6 @@ function MainPage () {
             rating: starsRating,
             id: crypto.randomUUID()
         };
-        console.log(typeof newReview.rating);
 
         if (highestRating === null && lowestRating === null) {
             setLowestRating(starsRating);
@@ -55,7 +55,6 @@ function MainPage () {
             if (starsRating > highestRating) 
                 setHighestRating(starsRating);
         }
-        console.log(highestRating, lowestRating);
 
         setReviews(prevReviews => {
             const updatedReviews = [...prevReviews, newReview];
@@ -112,8 +111,24 @@ function MainPage () {
     }
 
     function openStatisticsPage () {
-        window.open("/statistics", "_blank");
+        const newTab = window.open("/statistics", "_blank");
+        setStatisticsTab(newTab);
+
+        setTimeout(() => {
+            newTab.postMessage(reviews, "*");
+        }, 1000);
+
+        // const sendMessage = (event) => {
+        //     if (event.data.status === "ready") {
+        //       newTab.postMessage(reviews, window.location.origin);
+        //       window.removeEventListener("message", sendMessage); // Clean up
+        // }
     }
+
+    useEffect(() => {
+        if (statisticsTab)
+            statisticsTab.postMessage(reviews, "*");
+    }, [reviews]);
 
     return (
         <div>
