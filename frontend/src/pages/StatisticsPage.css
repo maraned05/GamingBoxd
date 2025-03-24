@@ -18,10 +18,21 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.chartsContainer {
+    padding-top: 300px;
+    height: 90%;
+    width: 100%;
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     overflow: scroll;
 }
 
-.pieChart {
+.pieChart, .areaChart, .barChart {
     height: 400px;
     width: 90%;
     display: flex;
