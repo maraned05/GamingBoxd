@@ -10,7 +10,6 @@ function EditForm (props) {
     const [errors, setErrors] = useState({title: "", body: "", rating: ""});
 
     function changeHandler (event) {
-        console.log(event);
         const { name, value } = event.target; 
         setFormData({...formData, [name]: value});
         setErrors({...errors, [name]: ""});

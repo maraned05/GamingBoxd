@@ -10,115 +10,65 @@ import AddForm from "../components/AddForm/AddForm"
 import EditForm from "../components/EditForm/EditForm"
 import Pagination from "../components/Pagination/Pagination";
 import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsButton";
+import SearchBarDate from "../components/SearchBar/SearchBarDate";
 
-function MainPage () {
-    const [reviews, setReviews] = useState([]);
+function MainPage (props) {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
-    const [shownReviews, setShownReviews] = useState([]);
-    const [lowestRating, setLowestRating] = useState(null);
-    const [highestRating, setHighestRating] = useState(null);
     const [statisticsTab, setStatisticsTab] = useState(null);
 
+
+    // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 8;
-    // const [indexOfLastReview, setIndexOfLastReview] = useState(8);
-    // const [indexOfFirstReview, setIndexOfFirstReview] = useState(0);
-    // const [currentReviews, setCurrentReviews] = useState(shownReviews.slice(indexOfFirstReview, indexOfLastReview));
-
     const indexOfLastReview = currentPage * reviewsPerPage;
     const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-    const currentReviews = shownReviews.slice(indexOfFirstReview, indexOfLastReview);
+    const currentReviews = props.reviewsList.slice(indexOfFirstReview, indexOfLastReview);
 
     function paginate (pageNumber) {
         setCurrentPage(pageNumber);
     }
 
-    function pressAddReviewButtonHandler (reviewTitle, reviewBody, starsRating, reviewDate) {
-        const newReview = {
-            title: reviewTitle,
-            body: reviewBody,
-            rating: starsRating,
-            date: reviewDate,
-            id: crypto.randomUUID()
-        };
-
-        if (highestRating === null && lowestRating === null) {
-            setLowestRating(starsRating);
-            setHighestRating(starsRating);
-        }
-        else {
-            if (starsRating < lowestRating) 
-                setLowestRating(starsRating);
-    
-            if (starsRating > highestRating) 
-                setHighestRating(starsRating);
-        }
-
-        setReviews(prevReviews => {
-            const updatedReviews = [...prevReviews, newReview];
-            setShownReviews(updatedReviews);
-            return updatedReviews;
-        });
+    function pressAddReviewButtonHandler (reviewTitle, reviewBody, reviewRating, reviewDate) {
+        props.onAddReview(reviewTitle, reviewBody, reviewRating, reviewDate);
     }
 
     function pressEditReviewButtonHandler (newReviewData) {
-        setReviews((prevReviews) => {
-            const updatedReviews = prevReviews.map((review) => review.id === newReviewData.id ? 
-            {title: newReviewData.title, body: newReviewData.body, rating: newReviewData.rating, date: newReviewData.date, 
-             id: newReviewData.id} : review )
-            setShownReviews(updatedReviews);
-            return updatedReviews;
-            }
-        );
+        props.onEditReview(newReviewData);
     }
 
-    function editHandler (reviewData) {
+    function openEditFormHandler (reviewData) {
         setIsEditOpen(true);
         setEditFormContent(<EditForm setIsEditOpen = {setIsEditOpen} reviewData = {reviewData} 
             onPressEditReviewButton = {pressEditReviewButtonHandler} />)
     }
 
     function searchHandler (event) {
-        const query = event.target.value;
-        
-        if (query.trim() === "")
-            setShownReviews(reviews);
+        props.onFiltering(event.target.value);
+    }
 
-        else setShownReviews(reviews.filter((review) => review.title.toLowerCase().includes(query)));
+    function searchDateHandler (event) {
+        props.onDateFiltering(event.target.value);
     }
 
     function sortingHandler() {
-        setIsSorted((prevValue) => {
-            const newValue = !prevValue;
-            if (newValue) {
-                const updatedReviews = [...reviews].sort(function (r1, r2) {return r1.rating - r2.rating; });
-                setShownReviews(updatedReviews);
-            }
-            else setShownReviews(reviews);
-            return newValue;
-        }
-        );
+        setIsSorted(prevValue => {return !prevValue;});
+        props.onSorting(isSorted);
     }
 
-    function deleteHandler (reviewID) {
-        setReviews(prevReviews => {
-            const updatedReviews = prevReviews.filter(r => r.id !== reviewID);
-            setShownReviews(updatedReviews);
-            console.log(reviews);
-            return updatedReviews;
-        });
+    function deleteReviewHandler (reviewID) {
+        props.onDeleteReview(reviewID);
     }
 
     function openStatisticsPage () {
-        const newTab = window.open("/statistics", "_blank");
-        setStatisticsTab(newTab);
+        // const newTab = window.open("/statistics", "_blank");
+        // setStatisticsTab(newTab);
 
-        setTimeout(() => {
-            newTab.postMessage(reviews, "*");
-        }, 1000);
+        // setTimeout(() => {
+        //     newTab.postMessage(reviews, "*");
+        // }, 1000);
 
         // const sendMessage = (event) => {
         //     if (event.data.status === "ready") {
@@ -127,10 +77,10 @@ function MainPage () {
         // }
     }
 
-    useEffect(() => {
-        if (statisticsTab)
-            statisticsTab.postMessage(reviews, "*");
-    }, [reviews]);
+    // useEffect(() => {
+    //     if (statisticsTab)
+    //         statisticsTab.postMessage(reviews, "*");
+    // }, [reviews]);
 
     return (
         <div>
@@ -139,6 +89,7 @@ function MainPage () {
                 <div className="controlsBar">
                     <div className="leftControls">
                         <SearchBar onChange = {searchHandler}/>
+                        <SearchBarDate onChange = {searchDateHandler}/>
                         <FilterButton onChange = {sortingHandler}/>
                     </div>
                     <div className="rightControls">
@@ -148,28 +99,16 @@ function MainPage () {
                 </div>
                 <div className="reviewsGrid">  
                     {
-                        // shownReviews.map((r) => ( r.rating === highestRating ?
-                        //     <ReviewCard key = {r.id} review = {r} 
-                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "highest" />
-                        //     :
-                        //     r.rating === lowestRating ?
-                        //     <ReviewCard key = {r.id} review = {r} 
-                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "lowest"/>
-                        //     :
-                        //     <ReviewCard key = {r.id} review = {r} 
-                        //     onDelete = {deleteHandler} onEdit = {editHandler} rank = "average" />
-                        // ))
-
-                        currentReviews.map((r) => (
+                        props.reviewsList.map((r) => (
                             <ReviewCard key = {r.id} review = {r} 
-                            onDelete = {deleteHandler} onEdit = {editHandler} 
-                            rank = {(r.rating === highestRating && reviews.length > 1) ? "highest" : 
-                                    (r.rating === lowestRating && reviews.length > 1) ? "lowest" 
+                            onDelete = {deleteReviewHandler} onEdit = {openEditFormHandler} 
+                            rank = {(r.rating == props.highestRating) ? "highest" : 
+                                    (r.rating == props.lowestRating) ? "lowest" 
                                     : "average"} />
                         ))
                     }
                 </div>
-                <Pagination reviewsPerPage = {reviewsPerPage} totalReviews = {shownReviews.length} paginate = {paginate} />
+                <Pagination reviewsPerPage = {reviewsPerPage} totalReviews = {props.reviewsList.length} paginate = {paginate} />
             </div>
 
             { isAddOpen &&
