@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import './EditForm.css'
-import CloseButton from "../CloseButton/CloseButton";
-import InputStars from "../Stars/InputStars";
-import AddFormButton from "../AddForm/AddFormButton";
+import './AddForm.css'
+import CloseButton from "../../CloseButton/CloseButton";
+import InputStars from "../../Stars/InputStars";
+import FormButton from "../FormButton";
 
-function EditForm (props) {
-    const [formData, setFormData] = useState({title: props.reviewData.title, body: props.reviewData.body, 
-        rating: props.reviewData.rating, date: props.reviewData.date, id: props.reviewData.id});
-    const [errors, setErrors] = useState({title: "", body: "", rating: ""});
+function AddForm (props) {
+    const [formData, setFormData] = useState({title: "", body: "", rating: "", date: ""});
+    const [errors, setErrors] = useState({title: "", body: "", rating: "", date: ""});
 
     function changeHandler (event) {
         const { name, value } = event.target; 
@@ -26,8 +25,8 @@ function EditForm (props) {
             setErrors(newErrors);
         }
         else {
-            props.setIsEditOpen(false);
-            props.onPressEditReviewButton(formData);
+            props.setIsAddOpen(false);
+            props.onPressAddReviewButton(formData.title, formData.body, formData.rating, formData.date);
         }
     };
 
@@ -35,9 +34,9 @@ function EditForm (props) {
     return (
         <div className="formWindow">
             <div className="formHeader">
-                <h1>Edit a review</h1>
+                <h1>Add a review</h1>
             </div>
-            <CloseButton setIsOpen = {props.setIsEditOpen}/>
+            <CloseButton setIsOpen = {props.setIsAddOpen}/>
             <div className="formBody">
                 <div className="inputTitle">
                     <label>Game's Title:</label>
@@ -48,8 +47,7 @@ function EditForm (props) {
                 
                 <div className="inputReview">
                     <label>Review Body:</label>
-                    {/* i could use textarea here */}
-                    <input type="text" name="body" autoComplete="off" placeholder="Write your review"
+                    <textarea name="body" autoComplete="off" placeholder="Write your review"
                         value={formData.body} onChange={changeHandler}/>
                     {errors.body && <span style={{ color: "red", fontSize: "15px" }}>{errors.body}</span>}
                 </div>
@@ -66,11 +64,11 @@ function EditForm (props) {
                     {errors.date && <span style={{ color: "red", fontSize: "15px" }}>{errors.date}</span>}
                 </div>
 
-                <AddFormButton onPressAdd={pressAddHandler} 
+                <FormButton onPressAdd={pressAddHandler} buttonText = 'Add'
                     title = {formData.title} body = {formData.body} />
             </div>
         </div>
     );
 };
 
-export default EditForm;
+export default AddForm;

@@ -1,3 +1,7 @@
-const app = require('./server');
+const server = require('./server');
+const { BACKEND_PORT } = require('./config');
+const { BACKEND_URL } = require('./config');
 
-app.listen(5000);
+server.listen(BACKEND_PORT, () => {
+    console.log(`Server running on ${BACKEND_URL}:${BACKEND_PORT}`)
+});

@@ -1,11 +1,11 @@
 import React from "react";
 
-import './AddFormButton.css'
+import './FormButton.css'
 
 // () => {props.setIsOpen(false); props.onPressAdd(); }
 // disabled = {!props.title || !props.body}
 
-function AddFormButton (props) {
+function FormButton (props) {
 
     // function clickedAddHandler (e) {
     //     e.preventDefault();
@@ -15,9 +15,9 @@ function AddFormButton (props) {
 
     return (
         <button className="addButton" onClick={(e) => {e.preventDefault(); props.onPressAdd();}} >
-            Add
+            {props.buttonText}
         </button>
     );
 };
 
-export default AddFormButton;
+export default FormButton;

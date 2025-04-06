@@ -5,15 +5,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
+const { FRONTEND_URL } = require('./config');
 const { v4: uuidv4 } = require('uuid');
 uuidv4();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+  }
+});
 
 let REVIEWS = [];
 
 app.use(bodyParser.json());
 app.use(cors());
+
+io.on("connection", (socket) => {
+  socket.emit("reviews:init", REVIEWS);
+});
+
+app.get('/', (req, res, next) => {
+  res.status(200).send("Backend is Working!");
+});
 
 app.get('/reviews', (req, res, next) => {
     res.status(200).json({ reviews: REVIEWS });
@@ -64,8 +82,9 @@ app.post('/review', (req, res, next) => {
       id: uuidv4(),
     };
 
-    console.log(createdReview.id);
     REVIEWS.push(createdReview);
+
+    io.emit('review:new', createdReview);
 
     res
       .status(201)
@@ -87,6 +106,7 @@ app.put('/review/:id', (req, res, next) => {
     const index = REVIEWS.findIndex(review => review.id === id);
     if (index !== -1) {
         REVIEWS[index] = {title: title, body: body, rating: rating, date: date, id: id};
+        io.emit('review:updated', REVIEWS[index]);
         res.status(200).json({ message: 'Updated review.', review: REVIEWS[index]});
     }
     else {
@@ -101,6 +121,7 @@ app.delete('/review/:id', (req, res, next) => {
     const index = REVIEWS.findIndex(review => review.id === id);
     if (index !== -1) {
         REVIEWS = REVIEWS.filter(r => r.id !== id);
+        io.emit('review:deleted', id);
         res.status(200).json({ message: 'Deleted review.', reviewID: id});
     }
     else {
@@ -109,5 +130,4 @@ app.delete('/review/:id', (req, res, next) => {
 
 });
 
-// app.listen(5000);
-module.exports = app;
+module.exports = server;

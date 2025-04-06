@@ -6,8 +6,8 @@ import SearchBar from "../components/SearchBar/SearchBar";
 import FilterButton from "../components/FilterButton/FilterButton";
 import AddReviewButton from "../components/ControlsButtons/AddReviewButton";
 import ReviewCard from "../components/ReviewCard/ReviewCard";
-import AddForm from "../components/AddForm/AddForm"
-import EditForm from "../components/EditForm/EditForm"
+import AddForm from "../components/Forms/AddForm/AddForm"
+import EditForm from "../components/Forms/EditForm/EditForm"
 import Pagination from "../components/Pagination/Pagination";
 import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsButton";
 import SearchBarDate from "../components/SearchBar/SearchBarDate";
@@ -19,7 +19,6 @@ function MainPage (props) {
     const [editFormContent, setEditFormContent] = useState();
     const [statisticsTab, setStatisticsTab] = useState(null);
 
-
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 8;
@@ -30,6 +29,7 @@ function MainPage (props) {
     function paginate (pageNumber) {
         setCurrentPage(pageNumber);
     }
+
 
     function pressAddReviewButtonHandler (reviewTitle, reviewBody, reviewRating, reviewDate) {
         props.onAddReview(reviewTitle, reviewBody, reviewRating, reviewDate);
@@ -63,24 +63,9 @@ function MainPage (props) {
     }
 
     function openStatisticsPage () {
-        // const newTab = window.open("/statistics", "_blank");
-        // setStatisticsTab(newTab);
-
-        // setTimeout(() => {
-        //     newTab.postMessage(reviews, "*");
-        // }, 1000);
-
-        // const sendMessage = (event) => {
-        //     if (event.data.status === "ready") {
-        //       newTab.postMessage(reviews, window.location.origin);
-        //       window.removeEventListener("message", sendMessage); // Clean up
-        // }
+        const newTab = window.open("/statistics", "_blank");
+        setStatisticsTab(newTab);
     }
-
-    // useEffect(() => {
-    //     if (statisticsTab)
-    //         statisticsTab.postMessage(reviews, "*");
-    // }, [reviews]);
 
     return (
         <div>
@@ -99,7 +84,7 @@ function MainPage (props) {
                 </div>
                 <div className="reviewsGrid">  
                     {
-                        props.reviewsList.map((r) => (
+                        currentReviews.map((r) => (
                             <ReviewCard key = {r.id} review = {r} 
                             onDelete = {deleteReviewHandler} onEdit = {openEditFormHandler} 
                             rank = {(r.rating == props.highestRating) ? "highest" : 

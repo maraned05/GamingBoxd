@@ -1,23 +1,44 @@
 import React, { useEffect, useState } from "react";
 import './StatisticsPage.css';
 import { PieChart, Pie, Cell, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area, BarChart, Bar, Legend } from 'recharts'
+import io from 'socket.io-client';
+import { BACKEND_URL } from "../config";
 
 function StatisticsPage () {
     const [reviews, setReviews] = useState(null);
     const [ratingsData, setRatingsData] = useState(null);
     const [monthlyReviews, setMonthlyReviews] = useState(null);
     const [monthlyRatings, setMonthlyRatings] = useState(null);
-    const COLORS = ["#FF5733", "#FF8D1A", "#FFC300", "#33FF57", "#3385FF"];
+    const COLORS = ["#F90F0F", "#F97D0F", "#F9C00F", "#98E509", "#4CE509"];
+    const socket = io(BACKEND_URL);
 
     useEffect(() => {
-        const receiveMessage = (event) => {
-            if (event.origin !== window.location.origin) 
-                return;
-            setReviews(event.data);
-        };
+        socket.on('reviews:init', (initialReviews) => {
+            setReviews(initialReviews);
+        });
 
-        window.addEventListener("message", receiveMessage);
-        return () => window.removeEventListener("message", receiveMessage);
+        socket.on('review:new', (newReview) => {
+            setReviews(prev => [...prev, newReview]);
+        });
+
+        socket.on('review:updated', (updatedReview) => {
+            setReviews(prev => { 
+                return prev.map((r) => r.id === updatedReview.id ? 
+                {title: updatedReview.title, body: updatedReview.body, rating: updatedReview.rating, date: updatedReview.date, id: updatedReview.id}
+                : r)
+            })
+        });
+
+        socket.on('review:deleted', (reviewID) => {
+            setReviews(prev => {return prev.filter(r => r.id !== reviewID)});
+        });
+
+        return () => {
+            socket.off('reviews:init');
+            socket.off('review:new');
+            socket.off('review:updated');
+            socket.off('review:deleted');
+        };
     });
 
     useEffect(() => {
@@ -37,7 +58,7 @@ function StatisticsPage () {
             }
         });
 
-        return Object.entries(ratingCounts).map(([rating, count]) => ({
+        return Object.entries(ratingCounts).filter(([, count]) => count > 0).map(([rating, count]) => ({
             rating: `${rating} Stars`,
             count
             }
@@ -98,7 +119,8 @@ function StatisticsPage () {
                                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(1)}%`}>
                                         {   
                                             ratingsData.map((_, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                // <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length ]} />
+                                                <Cell key={`cell-${index}`} fill={COLORS[index]} />
                                             ))
                                         }
                                 </Pie>

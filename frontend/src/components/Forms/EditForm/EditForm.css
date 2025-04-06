@@ -51,8 +51,13 @@
     align-items: center;
 }   
 
-.inputReview input, .inputTitle input {
+.inputTitle input, .inputDate input {
     height: 30px;
+    width: 200px;
+}
+
+.inputTitle textarea {
+    height: 60px;
     width: 200px;
 }
 
