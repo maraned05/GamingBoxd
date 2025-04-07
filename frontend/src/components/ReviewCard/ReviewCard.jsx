@@ -3,6 +3,7 @@ import './ReviewCard.css'
 import Stars from "../Stars/Stars";
 import EditButton from "../ReviewButtons/EditButton";
 import DeleteButton from "../ReviewButtons/DeleteButton";
+import MediaButton from "../ReviewButtons/MediaButton";
 
 function ReviewCard (props) {
     return (
@@ -11,8 +12,12 @@ function ReviewCard (props) {
             <p className="title">{props.review.title}</p>
             <p className="body">{props.review.body}</p>
             <EditButton onPressEdit = {props.onEdit} reviewData = {props.review} />
-            <DeleteButton onPressDelete = {props.onDelete} reviewID = {props.review.id} />  
+            <DeleteButton onPressDelete = {props.onDelete} reviewID = {props.review.id} />
             <Stars value = {props.review.rating} reviewID = {props.review.id} className="stars" />
+            {
+                props.review.media &&
+                <MediaButton onPressMedia = {props.onMedia} reviewID = {props.review.id} />
+            }
         </div>
     );
 };

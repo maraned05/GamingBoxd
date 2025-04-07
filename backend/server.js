@@ -6,6 +6,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 const { Server } = require('socket.io');
 const { FRONTEND_URL } = require('./config');
 const { v4: uuidv4 } = require('uuid');
@@ -20,13 +23,43 @@ const io = new Server(server, {
   }
 });
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = "uploads/";
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
 let REVIEWS = [];
 
 app.use(bodyParser.json());
-app.use(cors());
+
+app.use(cors({
+  origin: FRONTEND_URL, 
+  credentials: true
+}));
+
+//app.use("/media", express.static(path.join(__dirname, "uploads")));
 
 io.on("connection", (socket) => {
   socket.emit("reviews:init", REVIEWS);
+});
+
+app.get('/media/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'uploads', req.params.filename);
+
+  res.download(filePath, req.params.filename, (err) => {
+    if (err) {
+      console.error(err);
+      res.status(404).send("File not found.");
+    }
+  });
 });
 
 app.get('/', (req, res, next) => {
@@ -63,8 +96,9 @@ app.get('/filteredByDateReviews/:textQuery', (req, res, next) => {
   res.status(200).json({ filteredReviews: [...REVIEWS].filter((review) => review.date.includes(textQuery)) });
 });
 
-app.post('/review', (req, res, next) => {
+app.post('/review', upload.single("media"), (req, res, next) => {
     const { title, body, rating, date } = req.body;
+    const mediaFilename = req.file?.filename;
 
     if (!title || title.trim().length === 0 || !body || body.trim().length === 0 || !rating || rating.trim().length === 0
         || !date || date.trim().length === 0) {
@@ -79,6 +113,7 @@ app.post('/review', (req, res, next) => {
       body: body,
       rating: rating,
       date: date,
+      media: mediaFilename,
       id: uuidv4(),
     };
 
@@ -119,7 +154,21 @@ app.delete('/review/:id', (req, res, next) => {
     const { id } = req.params;
 
     const index = REVIEWS.findIndex(review => review.id === id);
+
     if (index !== -1) {
+        if (REVIEWS[index].media) {
+            const filePath = path.join(__dirname, 'uploads', REVIEWS[index].media);
+            if (fs.existsSync(filePath)) {
+              fs.unlink(filePath, (err) => {
+                if (err) {
+                  console.error("Failed to delete file:", err);
+                } else {
+                  console.log("Deleted media file:", filePath);
+                }
+              });
+            }
+        }
+
         REVIEWS = REVIEWS.filter(r => r.id !== id);
         io.emit('review:deleted', id);
         res.status(200).json({ message: 'Deleted review.', reviewID: id});

@@ -5,6 +5,7 @@ import './App.css';
 import StatisticsPage from './pages/StatisticsPage';
 import { useConnectivityStatus } from './hooks/useConnectivityStatus';
 import { BACKEND_URL } from './config';
+import ReviewMediaPage from './pages/ReviewMediaPage';
 
 function App() {
   const [loadedReviews, setLoadedReviews] = useState([]);
@@ -27,15 +28,12 @@ function App() {
   const fetchHighestRating = async () => {
     const response = await fetch(`${BACKEND_URL}/reviews/highestRating`);
     const responseData = await response.json();
-    console.log(responseData.highestRating);
-    console.log(typeof responseData.highestRating);
     setHighestRating(responseData.highestRating);
   };
 
   const fetchLowestRating = async () => {
     const response = await fetch(`${BACKEND_URL}/reviews/lowestRating`);
     const responseData = await response.json();
-    console.log(responseData.lowestRating);
     setLowestRating(responseData.lowestRating);
   };
 
@@ -45,21 +43,20 @@ function App() {
       fetchLowestRating();
   }, []);
 
-  const addReviewHandler = async (reviewTitle, reviewBody, reviewRating, reviewDate) => {
+  const addReviewHandler = async (reviewData) => {
       try {
-        const newProduct = {
-          title: reviewTitle,
-          body: reviewBody,
-          rating: reviewRating,
-          date: reviewDate
-        };
+        const newProduct = new FormData();
+        newProduct.append("title", reviewData.title);
+        newProduct.append("body", reviewData.body);
+        newProduct.append("rating", reviewData.rating);
+        newProduct.append("date", reviewData.date);
+        if (reviewData.media) { 
+          newProduct.append("media", reviewData.media);
+        }
         let hasError = false;
         const response = await fetch(`${BACKEND_URL}/review`, {
           method: 'POST',
-          body: JSON.stringify(newProduct),
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          body: newProduct
         });
 
         if (!response.ok) {
@@ -74,7 +71,11 @@ function App() {
 
         setLoadedReviews(prevProducts => {
           return prevProducts.concat({
-            ...newProduct,
+            title: newProduct.get("title"),
+            body: newProduct.get("body"),
+            rating: newProduct.get("rating"),
+            date: newProduct.get("date"),
+            media: responseData.review.media,
             id: responseData.review.id
           });
         });
@@ -200,6 +201,7 @@ function App() {
           />
 
           <Route path='/statistics' element = {<StatisticsPage  />}/>
+          <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
         </Routes>
       </BrowserRouter>
     );

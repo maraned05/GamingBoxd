@@ -33,12 +33,12 @@ function EditForm (props) {
 
     
     return (
-        <div className="formWindow">
-            <div className="formHeader">
+        <div className="editFormWindow">
+            <div className="editFormHeader">
                 <h1>Edit a review</h1>
+                <CloseButton setIsOpen = {props.setIsEditOpen}/>
             </div>
-            <CloseButton setIsOpen = {props.setIsEditOpen}/>
-            <div className="formBody">
+            <div className="editFormBody">
                 <div className="inputTitle">
                     <label>Game's Title:</label>
                     <input type="text" name="title" autoComplete="off" placeholder="Game's Title"

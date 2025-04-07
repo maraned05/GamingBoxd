@@ -62,14 +62,12 @@ p.dateAdded {
 p.title {
   grid-column: 1 / 4;
   grid-row: 2 / 3;
-  /* grid-row: 1 / 2; */
   font-size: 25px;
   font-weight: 500;
 }
 
 p.body {
   grid-column: 1 / 4;
-  /* grid-row: 2 / 3; */
   grid-row: 3 / 4;
   font-size: 15px;
 }
@@ -84,9 +82,14 @@ p.body {
   grid-row: 4 / 5;
 }
 
+.mediaButton {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+  justify-self: end;
+}
+
 .ratingStars {
   grid-column: 3 / 4;
-  /* grid-row: 3 / 4; */
   grid-row: 4 / 5;
 }
 

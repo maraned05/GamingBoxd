@@ -5,13 +5,18 @@ import InputStars from "../../Stars/InputStars";
 import FormButton from "../FormButton";
 
 function AddForm (props) {
-    const [formData, setFormData] = useState({title: "", body: "", rating: "", date: ""});
+    const [formData, setFormData] = useState({title: "", body: "", rating: "", date: "", media: null});
     const [errors, setErrors] = useState({title: "", body: "", rating: "", date: ""});
 
     function changeHandler (event) {
         const { name, value } = event.target; 
-        setFormData({...formData, [name]: value});
-        setErrors({...errors, [name]: ""});
+        if (name === 'media') {
+            setFormData({...formData, [name]: event.target.files[0]});
+        }
+        else {
+            setFormData({...formData, [name]: value});
+            setErrors({...errors, [name]: ""});
+        }
     }
 
     function pressAddHandler () {
@@ -26,18 +31,19 @@ function AddForm (props) {
         }
         else {
             props.setIsAddOpen(false);
-            props.onPressAddReviewButton(formData.title, formData.body, formData.rating, formData.date);
+            // props.onPressAddReviewButton(formData.title, formData.body, formData.rating, formData.date);
+            props.onPressAddReviewButton(formData);
         }
     };
 
     
     return (
-        <div className="formWindow">
-            <div className="formHeader">
+        <div className="addFormWindow">
+            <div className="addFormHeader">
                 <h1>Add a review</h1>
+                <CloseButton setIsOpen = {props.setIsAddOpen}/>
             </div>
-            <CloseButton setIsOpen = {props.setIsAddOpen}/>
-            <div className="formBody">
+            <div className="addFormBody">
                 <div className="inputTitle">
                     <label>Game's Title:</label>
                     <input type="text" name="title" autoComplete="off" placeholder="Game's Title"
@@ -62,6 +68,11 @@ function AddForm (props) {
                     <label>Date:</label>
                     <input type="date" name="date" value={formData.date} onChange = {changeHandler} ></input>
                     {errors.date && <span style={{ color: "red", fontSize: "15px" }}>{errors.date}</span>}
+                </div>
+
+                <div className="inputMedia">
+                    <label>Upload Media:</label>
+                    <input type="file" accept="video/*,image/*" name="media" onChange = {changeHandler} ></input>
                 </div>
 
                 <FormButton onPressAdd={pressAddHandler} buttonText = 'Add'

@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300;400;500;600;700&display=swap');
+
+.mediaButton {
+    height: 18px;
+    width: 50px;
+    text-align: center;
+    font-size: 10px;
+    font-family: 'Zilla Slab', sans-serif;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: rgb(22, 161, 247);
+    background: transparent;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+    border: 2px solid rgb(22, 161, 247);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 0 rgb(22, 161, 247);
+  }
+  
+.mediaButton:hover {
+    color: white;
+    box-shadow: inset 0 -100px 0 0 rgb(22, 161, 247);
+}
+  
+.mediaButton:active {
+    transform: scale(0.9);
+}

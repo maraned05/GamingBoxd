@@ -17,7 +17,6 @@ function MainPage (props) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
-    const [statisticsTab, setStatisticsTab] = useState(null);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,9 +29,12 @@ function MainPage (props) {
         setCurrentPage(pageNumber);
     }
 
+    // function pressAddReviewButtonHandler (reviewTitle, reviewBody, reviewRating, reviewDate) {
+    //     props.onAddReview(reviewTitle, reviewBody, reviewRating, reviewDate);
+    // }
 
-    function pressAddReviewButtonHandler (reviewTitle, reviewBody, reviewRating, reviewDate) {
-        props.onAddReview(reviewTitle, reviewBody, reviewRating, reviewDate);
+    function pressAddReviewButtonHandler (reviewData) {
+        props.onAddReview(reviewData);
     }
 
     function pressEditReviewButtonHandler (newReviewData) {
@@ -62,9 +64,15 @@ function MainPage (props) {
         props.onDeleteReview(reviewID);
     }
 
+    function openReviewMediaHandler (reviewID) {
+        const index = props.reviewsList.findIndex(review => review.id === reviewID);
+        const mediaWindow = window.open(`/reviewMedia/${reviewID}`, "_blank");
+        console.log(props.reviewsList[index].media);
+        mediaWindow["mediaName"] = props.reviewsList[index].media;
+    }
+
     function openStatisticsPage () {
-        const newTab = window.open("/statistics", "_blank");
-        setStatisticsTab(newTab);
+        window.open("/statistics", "_blank");
     }
 
     return (
@@ -86,7 +94,7 @@ function MainPage (props) {
                     {
                         currentReviews.map((r) => (
                             <ReviewCard key = {r.id} review = {r} 
-                            onDelete = {deleteReviewHandler} onEdit = {openEditFormHandler} 
+                            onDelete = {deleteReviewHandler} onEdit = {openEditFormHandler} onMedia = {openReviewMediaHandler}
                             rank = {(r.rating == props.highestRating) ? "highest" : 
                                     (r.rating == props.lowestRating) ? "lowest" 
                                     : "average"} />
