@@ -16,13 +16,13 @@ function App() {
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
 
   const fetchReviews = async () => {
-    setIsLoading(true);
-    const response = await fetch(`${BACKEND_URL}/reviews`);
+      setIsLoading(true);
+      const response = await fetch(`${BACKEND_URL}/reviews`);
 
-    const responseData = await response.json();
+      const responseData = await response.json();
 
-    setLoadedReviews(responseData.reviews);
-    setIsLoading(false);
+      setLoadedReviews(responseData.reviews);
+      setIsLoading(false);
   };
 
   const fetchHighestRating = async () => {
@@ -196,7 +196,8 @@ function App() {
               isLoading ? <MainPage reviewsList = {[]}/> : 
               <MainPage onAddReview = {addReviewHandler} onEditReview = {editReviewHandler}
               onDeleteReview = {deleteReviewHandler} onSorting = {sortingHandler} onFiltering = {filteringHandler}  onDateFiltering = {dateFilteringHandler}
-              reviewsList = {loadedReviews} highestRating = {highestRating} lowestRating = {lowestRating} />
+              reviewsList = {loadedReviews} highestRating = {highestRating} lowestRating = {lowestRating} 
+              networkStatus = {isOnline} backendStatus = {backendStatus}/>
               } 
           />
 

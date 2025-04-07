@@ -29,10 +29,6 @@ function MainPage (props) {
         setCurrentPage(pageNumber);
     }
 
-    // function pressAddReviewButtonHandler (reviewTitle, reviewBody, reviewRating, reviewDate) {
-    //     props.onAddReview(reviewTitle, reviewBody, reviewRating, reviewDate);
-    // }
-
     function pressAddReviewButtonHandler (reviewData) {
         props.onAddReview(reviewData);
     }
@@ -111,6 +107,19 @@ function MainPage (props) {
             {   isEditOpen &&
                 editFormContent
             }
+
+            {
+                props.networkStatus === false && alert("Network is down!")
+            }
+
+            {
+                props.networkStatus === true && props.backendStatus === 'down' && alert("Backend is down!")
+            }
+
+            {
+                props.networkStatus === true && props.backendStatus === 'ok' && alert("✅ Connected")
+            }
+
         </div>
     );
 }
