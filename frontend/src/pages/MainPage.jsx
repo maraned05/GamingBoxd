@@ -11,12 +11,15 @@ import EditForm from "../components/Forms/EditForm/EditForm"
 import Pagination from "../components/Pagination/Pagination";
 import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsButton";
 import SearchBarDate from "../components/SearchBar/SearchBarDate";
+import { useConnectivityStatus } from '../hooks/useConnectivityStatus';
+import { BACKEND_URL } from '../config';
 
 function MainPage (props) {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
+    const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -109,15 +112,15 @@ function MainPage (props) {
             }
 
             {
-                props.networkStatus === false && alert("Network is down!")
+                !isOnline && <div className="connectionStatus">🚫 Network disconnected</div>
             }
 
             {
-                props.networkStatus === true && props.backendStatus === 'down' && alert("Backend is down!")
+                isOnline && backendStatus === 'down' && <div className="connectionStatus">⚠️ Cannot reach backend server</div>
             }
 
             {
-                props.networkStatus === true && props.backendStatus === 'ok' && alert("✅ Connected")
+                isOnline && backendStatus === 'ok' && <div className="connectionStatus">✅ Connected</div>
             }
 
         </div>

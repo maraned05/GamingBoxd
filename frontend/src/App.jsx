@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './pages/MainPage'; 
 import './App.css';
@@ -6,6 +6,8 @@ import StatisticsPage from './pages/StatisticsPage';
 import { useConnectivityStatus } from './hooks/useConnectivityStatus';
 import { BACKEND_URL } from './config';
 import ReviewMediaPage from './pages/ReviewMediaPage';
+import { queueOperation, syncPendingOperations } from './syncOperations';
+import {formDataToSerializable, objectToFormData} from './formdataSerialization';
 
 function App() {
   const [loadedReviews, setLoadedReviews] = useState([]);
@@ -14,6 +16,14 @@ function App() {
   const [highestRating, setHighestRating] = useState(null);
 
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+  
+  useEffect(() => {
+    if (isOnline && backendStatus === 'ok')
+      syncPendingOperations();
+      fetchReviews();
+      fetchHighestRating();
+      fetchLowestRating();
+  }, [isOnline, backendStatus]);
 
   const fetchReviews = async () => {
       setIsLoading(true);
@@ -43,50 +53,52 @@ function App() {
       fetchLowestRating();
   }, []);
 
-  const addReviewHandler = async (reviewData) => {
-      try {
-        const newProduct = new FormData();
-        newProduct.append("title", reviewData.title);
-        newProduct.append("body", reviewData.body);
-        newProduct.append("rating", reviewData.rating);
-        newProduct.append("date", reviewData.date);
-        if (reviewData.media) { 
-          newProduct.append("media", reviewData.media);
-        }
-        let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/review`, {
-          method: 'POST',
-          body: newProduct
-        });
-
-        if (!response.ok) {
-          hasError = true;
-        }
-
-        const responseData = await response.json();
-
-        if (hasError) {
-          throw new Error(responseData.message);
-        }
-
-        setLoadedReviews(prevProducts => {
-          return prevProducts.concat({
-            title: newProduct.get("title"),
-            body: newProduct.get("body"),
-            rating: newProduct.get("rating"),
-            date: newProduct.get("date"),
-            media: responseData.review.media,
-            id: responseData.review.id
-          });
-        });
-
-        fetchHighestRating();
-        fetchLowestRating();
-
-      } catch (error) {
-        alert(error.message || 'Something went wrong!');
+const addReviewHandler = async (reviewData) => {
+    let newProduct;
+    try {
+      newProduct = new FormData();
+      newProduct.append("title", reviewData.title);
+      newProduct.append("body", reviewData.body);
+      newProduct.append("rating", reviewData.rating);
+      newProduct.append("date", reviewData.date);
+      if (reviewData.media) { 
+        newProduct.append("media", reviewData.media);
       }
-  };
+      let hasError = false;
+      const response = await fetch(`${BACKEND_URL}/review`, {
+        method: 'POST',
+        body: newProduct
+      });
+
+      if (!response.ok) {
+        hasError = true;
+      }
+      const responseData = await response.json();
+
+      if (hasError) {
+        throw new Error(responseData.message);
+      }
+
+      setLoadedReviews(prevProducts => {
+        return prevProducts.concat({
+          title: newProduct.get("title"),
+          body: newProduct.get("body"),
+          rating: newProduct.get("rating"),
+          date: newProduct.get("date"),
+          media: responseData.review.media,
+          id: responseData.review.id
+        });
+      });
+
+      fetchHighestRating();
+      fetchLowestRating();
+
+    } catch (error) {
+      const serializablePayload = await formDataToSerializable(newProduct);
+      await queueOperation('create', serializablePayload);
+      alert(error.message || 'Something went wrong!');
+    }
+};
 
   const editReviewHandler = async (reviewData) => {
       try {
@@ -100,6 +112,7 @@ function App() {
         });
 
         if (!response.ok) {
+          await queueOperation('update', reviewData);
           hasError = true;
         }
 
@@ -133,6 +146,7 @@ function App() {
       });
 
       if (!response.ok) {
+        await queueOperation('delete', reviewID);
         hasError = true;
       }
 
@@ -193,11 +207,11 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element = {
-              isLoading ? <MainPage reviewsList = {[]}/> : 
-              <MainPage onAddReview = {addReviewHandler} onEditReview = {editReviewHandler}
+              isLoading ? <MainPage  reviewsList = {[]} /> :
+              <MainPage isLoading = {isLoading} onAddReview = {addReviewHandler} onEditReview = {editReviewHandler} 
               onDeleteReview = {deleteReviewHandler} onSorting = {sortingHandler} onFiltering = {filteringHandler}  onDateFiltering = {dateFilteringHandler}
               reviewsList = {loadedReviews} highestRating = {highestRating} lowestRating = {lowestRating} 
-              networkStatus = {isOnline} backendStatus = {backendStatus}/>
+              />
               } 
           />
 
