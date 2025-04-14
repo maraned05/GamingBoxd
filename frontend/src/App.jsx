@@ -15,15 +15,17 @@ function App() {
   const [lowestRating, setLowestRating] = useState(null);
   const [highestRating, setHighestRating] = useState(null);
 
-  //const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+  const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+  //const [networkFailed, setNetworkFailed] = useState(false);
   
-  // useEffect(() => {
-  //   if (isOnline && backendStatus === 'ok')
-  //     syncPendingOperations();
-  //     fetchReviews();
-  //     fetchHighestRating();
-  //     fetchLowestRating();
-  // }, [isOnline, backendStatus]);
+  useEffect(() => {
+    if (isOnline && backendStatus === 'ok')
+      syncPendingOperations();
+      // fetchReviews();
+      // fetchHighestRating();
+      // fetchLowestRating();
+      // setNetworkFailed(false);
+  }, [isOnline, backendStatus]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -59,12 +61,23 @@ function App() {
 
   const fetchReviews = async () => {
       setIsLoading(true);
-      const response = await fetch(`${BACKEND_URL}/reviews`);
+      try {
+        let hasError = false;
+        const response = await fetch(`${BACKEND_URL}/reviews`);
 
-      const responseData = await response.json();
+        if (! response.ok)
+            hasError = true;
 
-      setLoadedReviews(responseData.reviews);
-      setIsLoading(false);
+        const responseData = await response.json();
+        if (hasError)
+            throw new Error(responseData.message);
+
+        setLoadedReviews(responseData.reviews);
+        setIsLoading(false);
+      }
+      catch (error) {
+          alert(error.message);
+      }
   };
 
   const fetchHighestRating = async () => {
@@ -103,8 +116,6 @@ const addReviewHandler = async (reviewData) => {
       });
 
       if (!response.ok) {
-        // const serializablePayload = await formDataToSerializable(newProduct);
-        // await queueOperation('create', serializablePayload);
         hasError = true;
       }
       const responseData = await response.json();
@@ -128,13 +139,14 @@ const addReviewHandler = async (reviewData) => {
       fetchLowestRating();
 
     } catch (error) {
-      // const serializablePayload = await formDataToSerializable(newProduct);
-      // await queueOperation('create', serializablePayload);
+      const serializablePayload = await formDataToSerializable(newProduct);
+      await queueOperation('create', serializablePayload);
       alert(error.message || 'Something went wrong!');
     }
 };
 
   const editReviewHandler = async (reviewData) => {
+      console.log("inside edit " + reviewData.id);
       try {
         let hasError = false;
         const response = await fetch(`${BACKEND_URL}/review/${reviewData.id}`, {
@@ -146,7 +158,8 @@ const addReviewHandler = async (reviewData) => {
         });
 
         if (!response.ok) {
-          //await queueOperation('update', reviewData);
+          // await queueOperation('update', reviewData);
+          // setNetworkFailed(true);
           hasError = true;
         }
 
@@ -156,7 +169,6 @@ const addReviewHandler = async (reviewData) => {
           throw new Error(responseData.message);
         }
         
-
         setLoadedReviews(prevReviews => {
           return prevReviews.map((review) => review.id === responseData.review.id ? 
           {title: responseData.review.title, body: responseData.review.body, rating: responseData.review.rating, 
@@ -168,6 +180,7 @@ const addReviewHandler = async (reviewData) => {
 
       }
       catch (error) {
+        await queueOperation('update', reviewData);
         alert(error.message || 'Something went wrong!');
       }
   };
@@ -180,12 +193,10 @@ const addReviewHandler = async (reviewData) => {
       });
 
       if (!response.ok) {
-        //await queueOperation('delete', reviewID);
         hasError = true;
       }
 
       const responseData = await response.json();
-
       if (hasError) {
         throw new Error(responseData.message);
       }
@@ -193,12 +204,12 @@ const addReviewHandler = async (reviewData) => {
       setLoadedReviews(prevReviews => {
         return prevReviews.filter(r => r.id !== responseData.reviewID);
       });
-
       fetchHighestRating();
       fetchLowestRating();
       
     }
     catch (error) {
+        await queueOperation('delete', reviewID);
         alert(error.message || 'Something went wrong!');
     }
   }; 
