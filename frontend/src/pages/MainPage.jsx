@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import './MainPage.css'
 import Header from "../components/Header/Header";
@@ -27,6 +27,63 @@ function MainPage (props) {
     const indexOfLastReview = currentPage * reviewsPerPage;
     const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
     const currentReviews = props.reviewsList.slice(indexOfFirstReview, indexOfLastReview);
+
+    // Sliding window state
+    // const windowSize = 8;
+    // const [startIndex, setStartIndex] = useState(0);    
+    // const stepSize = 4;
+    // const [endIndex, setEndIndex] = useState(windowSize);
+
+    // const reviewsGridRef = useRef(null);
+
+    // const visibleReviews = props.reviewsList.slice(0, endIndex);
+
+    // Scroll detection
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const main = mainBodyRef.current;
+    //         if (!main) return;
+
+    //         if (main.scrollTop + main.clientHeight >= main.scrollHeight - 100) {
+    //             // Add more reviews to the window
+    //             setEndIndex(prevEnd => {
+    //                 const newEnd = Math.min(prevEnd + stepSize, props.reviewsList.length);
+    //                 return newEnd;
+    //             });
+    //         }
+    //     };
+
+    //     const main = mainBodyRef.current;
+    //     main?.addEventListener("scroll", handleScroll);
+
+    //     return () => main?.removeEventListener("scroll", handleScroll);
+    // }, [props.reviewsList.length]);
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const el = reviewsGridRef.current;
+    //         if (!el) return;
+    
+    //         if (el.scrollTop + el.clientHeight >= el.scrollHeight - 50) {
+    //             // Scroll reached bottom: move the window forward
+    //             setStartIndex(prev => {
+    //                 const nextStart = prev + 4;
+    //                 if (nextStart + windowSize > props.reviewsList.length) return prev;
+    //                 return nextStart;
+    //             });
+    //         }
+    
+    //         if (el.scrollTop === 0 && startIndex > 0) {
+    //             // Optional: allow scrolling back up
+    //             setStartIndex(prev => Math.max(0, prev - 4));
+    //         }
+    //     };
+    
+    //     const el = reviewsGridRef.current;
+    //     el?.addEventListener('scroll', handleScroll);
+    //     return () => el?.removeEventListener('scroll', handleScroll);
+    // }, [props.reviewsList.length, startIndex]);
+
 
     function paginate (pageNumber) {
         setCurrentPage(pageNumber);
@@ -91,16 +148,19 @@ function MainPage (props) {
                 </div>
                 <div className="reviewsGrid">  
                     {
-                        currentReviews.map((r) => (
-                            <ReviewCard key = {r.id} review = {r} 
-                            onDelete = {deleteReviewHandler} onEdit = {openEditFormHandler} onMedia = {openReviewMediaHandler}
+                        props.reviewsList.map((r) => (
+                            <ReviewCard key = {r.id} 
+                            review = {r} 
+                            onDelete = {deleteReviewHandler} 
+                            onEdit = {openEditFormHandler} 
+                            onMedia = {openReviewMediaHandler}
                             rank = {(r.rating == props.highestRating) ? "highest" : 
                                     (r.rating == props.lowestRating) ? "lowest" 
                                     : "average"} />
                         ))
                     }
                 </div>
-                <Pagination reviewsPerPage = {reviewsPerPage} totalReviews = {props.reviewsList.length} paginate = {paginate} />
+                {/* <Pagination reviewsPerPage = {reviewsPerPage} totalReviews = {props.reviewsList.length} paginate = {paginate} /> */}
             </div>
 
             { isAddOpen &&

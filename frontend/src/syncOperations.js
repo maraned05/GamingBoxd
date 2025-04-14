@@ -3,12 +3,12 @@ import { BACKEND_URL } from './config';
 import {objectToFormData} from './formdataSerialization';
 
 export async function queueOperation(type, payload) {
-    console.log('aloo');
+    console.log('inside queue operation');
     await db.pendingOperations.add({ type, payload });
 }
 
 export async function syncPendingOperations() {
-    console.log('VAAAAA');
+    console.log('inside sync pending');
     const operations = await db.pendingOperations.toArray();
 
     for (const op of operations) {

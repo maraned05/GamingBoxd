@@ -40,10 +40,11 @@ let REVIEWS = [];
 
 app.use(bodyParser.json());
 
-app.use(cors({
-  origin: FRONTEND_URL, 
-  credentials: true
-}));
+// app.use(cors({
+//   origin: FRONTEND_URL, 
+//   credentials: true
+// }));
+app.use(cors());
 
 //app.use("/media", express.static(path.join(__dirname, "uploads")));
 

@@ -31,7 +31,7 @@ export function useConnectivityStatus (API_URL) {
         }
 
         checkBackend();
-        const interval = setInterval(checkBackend, 5000); // every 10s
+        const interval = setInterval(checkBackend, 5000); // every 5s
 
         return () => clearInterval(interval);
 

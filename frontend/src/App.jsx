@@ -15,15 +15,15 @@ function App() {
   const [lowestRating, setLowestRating] = useState(null);
   const [highestRating, setHighestRating] = useState(null);
 
-  const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+  //const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
   
-  useEffect(() => {
-    if (isOnline && backendStatus === 'ok')
-      syncPendingOperations();
-      fetchReviews();
-      fetchHighestRating();
-      fetchLowestRating();
-  }, [isOnline, backendStatus]);
+  // useEffect(() => {
+  //   if (isOnline && backendStatus === 'ok')
+  //     syncPendingOperations();
+  //     fetchReviews();
+  //     fetchHighestRating();
+  //     fetchLowestRating();
+  // }, [isOnline, backendStatus]);
 
   const fetchReviews = async () => {
       setIsLoading(true);
@@ -71,6 +71,8 @@ const addReviewHandler = async (reviewData) => {
       });
 
       if (!response.ok) {
+        // const serializablePayload = await formDataToSerializable(newProduct);
+        // await queueOperation('create', serializablePayload);
         hasError = true;
       }
       const responseData = await response.json();
@@ -94,8 +96,8 @@ const addReviewHandler = async (reviewData) => {
       fetchLowestRating();
 
     } catch (error) {
-      const serializablePayload = await formDataToSerializable(newProduct);
-      await queueOperation('create', serializablePayload);
+      // const serializablePayload = await formDataToSerializable(newProduct);
+      // await queueOperation('create', serializablePayload);
       alert(error.message || 'Something went wrong!');
     }
 };
@@ -112,7 +114,7 @@ const addReviewHandler = async (reviewData) => {
         });
 
         if (!response.ok) {
-          await queueOperation('update', reviewData);
+          //await queueOperation('update', reviewData);
           hasError = true;
         }
 
@@ -134,7 +136,7 @@ const addReviewHandler = async (reviewData) => {
 
       }
       catch (error) {
-          alert(error.message || 'Something went wrong!');
+        alert(error.message || 'Something went wrong!');
       }
   };
 
@@ -146,7 +148,7 @@ const addReviewHandler = async (reviewData) => {
       });
 
       if (!response.ok) {
-        await queueOperation('delete', reviewID);
+        //await queueOperation('delete', reviewID);
         hasError = true;
       }
 
@@ -208,7 +210,7 @@ const addReviewHandler = async (reviewData) => {
         <Routes>
           <Route path='/' element = {
               isLoading ? <MainPage  reviewsList = {[]} /> :
-              <MainPage isLoading = {isLoading} onAddReview = {addReviewHandler} onEditReview = {editReviewHandler} 
+              <MainPage onAddReview = {addReviewHandler} onEditReview = {editReviewHandler} 
               onDeleteReview = {deleteReviewHandler} onSorting = {sortingHandler} onFiltering = {filteringHandler}  onDateFiltering = {dateFilteringHandler}
               reviewsList = {loadedReviews} highestRating = {highestRating} lowestRating = {lowestRating} 
               />
