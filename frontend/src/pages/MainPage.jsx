@@ -8,7 +8,7 @@ import AddReviewButton from "../components/ControlsButtons/AddReviewButton";
 import ReviewCard from "../components/ReviewCard/ReviewCard";
 import AddForm from "../components/Forms/AddForm/AddForm"
 import EditForm from "../components/Forms/EditForm/EditForm"
-import Pagination from "../components/Pagination/Pagination";
+//import Pagination from "../components/Pagination/Pagination";
 import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsButton";
 import SearchBarDate from "../components/SearchBar/SearchBarDate";
 import { useConnectivityStatus } from '../hooks/useConnectivityStatus';
@@ -21,12 +21,30 @@ function MainPage (props) {
     const [editFormContent, setEditFormContent] = useState();
     const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
 
+    //Scroll
+    const reviewsGridRef = useRef(null);
+    useEffect(() => {
+        const handleScroll = () => {
+            const grid = reviewsGridRef.current;
+            if (!grid) return;
+
+            if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 50) {
+                props.onLoadMore(); // Trigger loading more reviews
+            }
+        };
+
+        const grid = reviewsGridRef.current;
+        grid?.addEventListener("scroll", handleScroll);
+
+        return () => grid?.removeEventListener("scroll", handleScroll);
+    }, [props]);
+
     // Pagination
-    const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 8;
-    const indexOfLastReview = currentPage * reviewsPerPage;
-    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-    const currentReviews = props.reviewsList.slice(indexOfFirstReview, indexOfLastReview);
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const reviewsPerPage = 8;
+    // const indexOfLastReview = currentPage * reviewsPerPage;
+    // const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    // const currentReviews = props.reviewsList.slice(indexOfFirstReview, indexOfLastReview);
 
     // Sliding window state
     // const windowSize = 8;
@@ -146,10 +164,10 @@ function MainPage (props) {
                         <AddReviewButton setIsOpen = {setIsAddOpen}/>
                     </div>
                 </div>
-                <div className="reviewsGrid">  
+                <div className="reviewsGrid" ref={reviewsGridRef}>  
                     {
                         props.reviewsList.map((r) => (
-                            <ReviewCard key = {r.id} 
+                            <ReviewCard key = {r.id}
                             review = {r} 
                             onDelete = {deleteReviewHandler} 
                             onEdit = {openEditFormHandler} 

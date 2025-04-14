@@ -71,6 +71,15 @@ app.get('/reviews', (req, res, next) => {
     res.status(200).json({ reviews: REVIEWS });
 });
 
+app.get('/paginatedReviews', (req, res, next) => {
+  const { page = 1, limit = 8 } = req.query; // Default to page 1, 8 reviews per page
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + parseInt(limit);
+
+  const paginatedReviews = REVIEWS.slice(startIndex, endIndex);
+  res.status(200).json({ reviews: paginatedReviews });
+});
+
 app.get('/reviews/lowestRating', (req, res, next) => {
     if (REVIEWS.length === 0 || REVIEWS.length === 1)
       res.status(200).json({ lowestRating: null });

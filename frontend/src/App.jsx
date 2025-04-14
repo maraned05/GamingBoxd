@@ -25,6 +25,38 @@ function App() {
   //     fetchLowestRating();
   // }, [isOnline, backendStatus]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchPaginatedReviews = async (page) => {
+      setIsLoading(true);
+      const response = await fetch(`${BACKEND_URL}/paginatedReviews?page=${page}&limit=8`);
+      const responseData = await response.json();
+
+      if (responseData.reviews.length === 0) {
+          setHasMore(false); // No more reviews to fetch
+      } else {
+          //setLoadedReviews((prevReviews) => [...prevReviews, ...responseData.reviews]);
+          setLoadedReviews((prevReviews) => {
+            const newReviews = responseData.reviews.filter(
+                (newReview) => !prevReviews.some((review) => review.id === newReview.id)
+            );
+            return [...prevReviews, ...newReviews];
+        });
+      }
+      setIsLoading(false);
+  };
+
+  useEffect(() => {
+      fetchPaginatedReviews(currentPage);
+  }, [currentPage]);
+
+  const loadMoreReviews = () => {
+    if (hasMore && !isLoading) {
+        setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
   const fetchReviews = async () => {
       setIsLoading(true);
       const response = await fetch(`${BACKEND_URL}/reviews`);
@@ -209,14 +241,21 @@ const addReviewHandler = async (reviewData) => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element = {
-              isLoading ? <MainPage  reviewsList = {[]} /> :
-              <MainPage onAddReview = {addReviewHandler} onEditReview = {editReviewHandler} 
-              onDeleteReview = {deleteReviewHandler} onSorting = {sortingHandler} onFiltering = {filteringHandler}  onDateFiltering = {dateFilteringHandler}
-              reviewsList = {loadedReviews} highestRating = {highestRating} lowestRating = {lowestRating} 
+              isLoading ? <MainPage  reviewsList = {[]} /> 
+              :
+              <MainPage onAddReview = {addReviewHandler} 
+              onEditReview = {editReviewHandler} 
+              onDeleteReview = {deleteReviewHandler} 
+              onSorting = {sortingHandler} 
+              onFiltering = {filteringHandler}  
+              onDateFiltering = {dateFilteringHandler}
+              reviewsList = {loadedReviews} 
+              onLoadMore={loadMoreReviews}
+              highestRating = {highestRating} 
+              lowestRating = {lowestRating} 
               />
               } 
           />
-
           <Route path='/statistics' element = {<StatisticsPage  />}/>
           <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
         </Routes>
