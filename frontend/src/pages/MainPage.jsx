@@ -111,13 +111,13 @@ function MainPage (props) {
                     {
                         props.reviewsList.map((r) => (
                             <ReviewCard key = {r.id}
-                            review = {r} 
-                            onDelete = {deleteReviewHandler} 
-                            onEdit = {openEditFormHandler} 
-                            onMedia = {openReviewMediaHandler}
-                            rank = {(r.rating == props.highestRating) ? "highest" : 
-                                    (r.rating == props.lowestRating) ? "lowest" 
-                                    : "average"} />
+                                review = {r} 
+                                onDelete = {deleteReviewHandler} 
+                                onEdit = {openEditFormHandler} 
+                                onMedia = {openReviewMediaHandler}
+                                rank = {(r.rating == props.highestRating) ? "highest" : 
+                                    (r.rating == props.lowestRating) ? "lowest" : "average"} 
+                            />
                         ))
                     }
                 </div>

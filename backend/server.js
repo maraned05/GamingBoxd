@@ -1,7 +1,3 @@
-// import express from 'express';
-// import bodyParser from 'body-parser';
-// import cors from 'cors';
-// import { v4 as uuidv4 } from 'uuid';
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -15,6 +11,12 @@ const { v4: uuidv4 } = require('uuid');
 uuidv4();
 
 const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+let REVIEWS = [];
+
+// Statistics Page Socket
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -22,7 +24,11 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"]
   }
 });
+io.on("connection", (socket) => {
+  socket.emit("reviews:init", REVIEWS);
+});
 
+// Local Backup Storage for CRUD operations
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = "uploads/";
@@ -33,24 +39,8 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-
 const upload = multer({ storage });
 
-let REVIEWS = [];
-
-app.use(bodyParser.json());
-
-// app.use(cors({
-//   origin: FRONTEND_URL, 
-//   credentials: true
-// }));
-app.use(cors());
-
-//app.use("/media", express.static(path.join(__dirname, "uploads")));
-
-io.on("connection", (socket) => {
-  socket.emit("reviews:init", REVIEWS);
-});
 
 app.get('/media/:filename', (req, res) => {
   const filePath = path.join(__dirname, 'uploads', req.params.filename);
@@ -68,45 +58,54 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/reviews', (req, res, next) => {
-    res.status(200).json({ reviews: REVIEWS });
-});
+  const { page, limit, sort, titleFilter, dateFilter } = req.query;
+  let responseReviews =  REVIEWS;
 
-app.get('/paginatedReviews', (req, res, next) => {
-  const { page = 1, limit = 8 } = req.query; // Default to page 1, 8 reviews per page
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + parseInt(limit);
+  // Paginated Reviews
+  if (page && limit) {
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + parseInt(limit);
+  
+    const responseReviews = REVIEWS.slice(startIndex, endIndex);
+  }
 
-  const paginatedReviews = REVIEWS.slice(startIndex, endIndex);
-  res.status(200).json({ reviews: paginatedReviews });
+  // Sorted by Rating
+  if (sort) {
+    if (sort === "asc")
+      responseReviews = [...REVIEWS].sort(function (r1, r2) {return r1.rating - r2.rating; });
+
+    else if (sort == "desc")
+      responseReviews = [...REVIEWS].sort(function (r1, r2) {return r2.rating - r1.rating; });
+
+    else res.status(400).send("Invalid sorting request.");
+  }
+
+  // Filtering by Game Title
+  if (titleFilter) {
+    responseReviews = [...REVIEWS].filter((review) => review.title.toLowerCase().includes(titleFilter));
+  }
+
+  // Filtering by Date Added
+  if (dateFilter) {
+    responseReviews = [...REVIEWS].filter((review) => review.date.includes(dateFilter));
+  }
+
+  res.status(200).json({ reviews: responseReviews });
 });
 
 app.get('/reviews/lowestRating', (req, res, next) => {
-    if (REVIEWS.length === 0 || REVIEWS.length === 1)
-      res.status(200).json({ lowestRating: null });
-    else res.status(200).json({ lowestRating: REVIEWS.reduce((min, review) => Math.min(min, review.rating), '5') });
+  if (REVIEWS.length === 0 || REVIEWS.length === 1)
+    res.status(200).json({ lowestRating: null });
+  else res.status(200).json({ lowestRating: REVIEWS.reduce((min, review) => Math.min(min, review.rating), '5') });
 });
 
 app.get('/reviews/highestRating', (req, res, next) => {
-    if (REVIEWS.length === 0 || REVIEWS.length === 1)
-      res.status(200).json({ highestRating: null });
-    else res.status(200).json({ highestRating: REVIEWS.reduce((max, review) => Math.max(max, review.rating), '1') });
+  if (REVIEWS.length === 0 || REVIEWS.length === 1)
+    res.status(200).json({ highestRating: null });
+  else res.status(200).json({ highestRating: REVIEWS.reduce((max, review) => Math.max(max, review.rating), '1') });
 });
 
-app.get('/sortedReviews', (req, res, next) => {
-    res.status(200).json({ sortedReviews: [...REVIEWS].sort(function (r1, r2) {return r1.rating - r2.rating; }) });
-});
-
-app.get('/filteredReviews/:textQuery', (req, res, next) => {
-    const { textQuery } = req.params;
-    res.status(200).json({ filteredReviews: [...REVIEWS].filter((review) => review.title.toLowerCase().includes(textQuery)) });
-});
-
-app.get('/filteredByDateReviews/:textQuery', (req, res, next) => {
-  const { textQuery } = req.params;
-  res.status(200).json({ filteredReviews: [...REVIEWS].filter((review) => review.date.includes(textQuery)) });
-});
-
-app.post('/review', upload.single("media"), (req, res, next) => {
+app.post('/reviews', upload.single("media"), (req, res, next) => {
     const { title, body, rating, date } = req.body;
     const mediaFilename = req.file?.filename;
 
@@ -136,7 +135,7 @@ app.post('/review', upload.single("media"), (req, res, next) => {
       .json({ message: 'Created new review.', review: createdReview});
 });
 
-app.put('/review/:id', (req, res, next) => {
+app.put('/reviews/:id', (req, res, next) => {
     const { title, body, rating, date } = req.body;
     const { id } = req.params;
 
@@ -160,7 +159,7 @@ app.put('/review/:id', (req, res, next) => {
 
 });
 
-app.delete('/review/:id', (req, res, next) => {
+app.delete('/reviews/:id', (req, res, next) => {
     const { id } = req.params;
 
     const index = REVIEWS.findIndex(review => review.id === id);

@@ -31,7 +31,6 @@ function AddForm (props) {
         }
         else {
             props.setIsAddOpen(false);
-            // props.onPressAddReviewButton(formData.title, formData.body, formData.rating, formData.date);
             props.onPressAddReviewButton(formData);
         }
     };

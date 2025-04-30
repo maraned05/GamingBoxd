@@ -70,6 +70,10 @@ p.body {
   grid-column: 1 / 4;
   grid-row: 3 / 4;
   font-size: 15px;
+  /* height: 55px;
+  width: 230px; */
+  overflow: hidden;
+  /* border: 1px black solid; */
 }
 
 .editButton {

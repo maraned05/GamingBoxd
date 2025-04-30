@@ -16,7 +16,6 @@ function App() {
   const [highestRating, setHighestRating] = useState(null);
 
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
-  //const [networkFailed, setNetworkFailed] = useState(false);
   
   useEffect(() => {
     if (isOnline && backendStatus === 'ok')
@@ -32,7 +31,7 @@ function App() {
 
   const fetchPaginatedReviews = async (page) => {
       setIsLoading(true);
-      const response = await fetch(`${BACKEND_URL}/paginatedReviews?page=${page}&limit=8`);
+      const response = await fetch(`${BACKEND_URL}/reviews?page=${page}&limit=8`);
       const responseData = await response.json();
 
       if (responseData.reviews.length === 0) {
@@ -110,7 +109,7 @@ const addReviewHandler = async (reviewData) => {
         newProduct.append("media", reviewData.media);
       }
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/review`, {
+      const response = await fetch(`${BACKEND_URL}/reviews`, {
         method: 'POST',
         body: newProduct
       });
@@ -149,7 +148,7 @@ const addReviewHandler = async (reviewData) => {
       console.log("inside edit " + reviewData.id);
       try {
         let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/review/${reviewData.id}`, {
+        const response = await fetch(`${BACKEND_URL}/reviews/${reviewData.id}`, {
           method: 'PUT',
           body: JSON.stringify(reviewData),
           headers: {
@@ -158,8 +157,6 @@ const addReviewHandler = async (reviewData) => {
         });
 
         if (!response.ok) {
-          // await queueOperation('update', reviewData);
-          // setNetworkFailed(true);
           hasError = true;
         }
 
@@ -188,7 +185,7 @@ const addReviewHandler = async (reviewData) => {
   const deleteReviewHandler = async (reviewID) => {
     try {
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/review/${reviewID}`, {
+      const response = await fetch(`${BACKEND_URL}/reviews/${reviewID}`, {
         method: 'DELETE'
       });
 
@@ -217,9 +214,9 @@ const addReviewHandler = async (reviewData) => {
   const sortingHandler = async (isSorted) => {
       setIsLoading(true);
       if (isSorted) {
-        const response = await fetch(`${BACKEND_URL}/sortedReviews`);
+        const response = await fetch(`${BACKEND_URL}/reviews?sort=asc`);
         const responseData = await response.json();
-        setLoadedReviews(responseData.sortedReviews);
+        setLoadedReviews(responseData.reviews);
       } 
       else {
         fetchReviews();
@@ -229,11 +226,11 @@ const addReviewHandler = async (reviewData) => {
 
   const filteringHandler = async (textQuery) => {
     if (textQuery.trim() === "")
-        fetchReviews();
+        fetchReviews(); 
     else {
-      const response = await fetch(`${BACKEND_URL}/filteredReviews/${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews?titleFilter=${textQuery}`);
       const responseData = await response.json();
-      setLoadedReviews(responseData.filteredReviews);
+      setLoadedReviews(responseData.reviews);
     }
   };
 
@@ -241,9 +238,9 @@ const addReviewHandler = async (reviewData) => {
     if (textQuery.trim() === "")
         fetchReviews();
     else {
-      const response = await fetch(`${BACKEND_URL}/filteredByDateReviews/${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews?dateFilter=${textQuery}`);
       const responseData = await response.json();
-      setLoadedReviews(responseData.filteredReviews);
+      setLoadedReviews(responseData.reviews);
     }
   };
 
@@ -252,20 +249,20 @@ const addReviewHandler = async (reviewData) => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element = {
-              isLoading ? <MainPage  reviewsList = {[]} /> 
+              isLoading ? <MainPage reviewsList = {[]} /> 
               :
-              <MainPage onAddReview = {addReviewHandler} 
-              onEditReview = {editReviewHandler} 
-              onDeleteReview = {deleteReviewHandler} 
-              onSorting = {sortingHandler} 
-              onFiltering = {filteringHandler}  
-              onDateFiltering = {dateFilteringHandler}
-              reviewsList = {loadedReviews} 
-              onLoadMore={loadMoreReviews}
-              highestRating = {highestRating} 
-              lowestRating = {lowestRating} 
+              <MainPage reviewsList = {loadedReviews} 
+                onAddReview = {addReviewHandler} 
+                onEditReview = {editReviewHandler} 
+                onDeleteReview = {deleteReviewHandler} 
+                onSorting = {sortingHandler} 
+                onFiltering = {filteringHandler}  
+                onDateFiltering = {dateFilteringHandler}
+                onLoadMore = {loadMoreReviews}
+                highestRating = {highestRating} 
+                lowestRating = {lowestRating} 
               />
-              } 
+            } 
           />
           <Route path='/statistics' element = {<StatisticsPage  />}/>
           <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
