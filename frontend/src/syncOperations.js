@@ -17,14 +17,14 @@ export async function syncPendingOperations() {
 
             if (op.type === 'create') {
                 const formData = objectToFormData(op.payload);
-                response = await fetch(`${BACKEND_URL}/review`, {
+                response = await fetch(`${BACKEND_URL}/reviews`, {
                     method: 'POST',
                     body: formData
                 });
             }
 
             if (op.type === 'update') {
-                response = await fetch(`${BACKEND_URL}/review/${op.payload.id}`, {
+                response = await fetch(`${BACKEND_URL}/reviews/${op.payload.id}`, {
                     method: 'PUT',
                     body: JSON.stringify(op.payload),
                     headers: {
@@ -34,7 +34,7 @@ export async function syncPendingOperations() {
             }
 
             if (op.type === 'delete') {
-                response = await fetch(`${BACKEND_URL}/review/${op.payload}`, {
+                response = await fetch(`${BACKEND_URL}/reviews/${op.payload}`, {
                     method: 'DELETE'
                 });
             }
@@ -59,5 +59,5 @@ export async function syncPendingOperations() {
         } catch (error) {
             console.log(error.message);
         }
-  }
+    }
 }

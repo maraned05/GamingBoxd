@@ -17,14 +17,14 @@ function App() {
 
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
   
-  useEffect(() => {
-    if (isOnline && backendStatus === 'ok')
-      syncPendingOperations();
-      // fetchReviews();
-      // fetchHighestRating();
-      // fetchLowestRating();
-      // setNetworkFailed(false);
-  }, [isOnline, backendStatus]);
+  // useEffect(() => {
+  //   if (isOnline && backendStatus === 'ok')
+  //     syncPendingOperations();
+  //     // fetchReviews();
+  //     // fetchHighestRating();
+  //     // fetchLowestRating();
+  //     // setNetworkFailed(false);
+  // }, [isOnline, backendStatus]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -123,6 +123,7 @@ const addReviewHandler = async (reviewData) => {
         throw new Error(responseData.message);
       }
 
+      console.log(responseData.review.id);
       setLoadedReviews(prevProducts => {
         return prevProducts.concat({
           title: newProduct.get("title"),
@@ -214,11 +215,13 @@ const addReviewHandler = async (reviewData) => {
   const sortingHandler = async (isSorted) => {
       setIsLoading(true);
       if (isSorted) {
+        console.log('in sorted');
         const response = await fetch(`${BACKEND_URL}/reviews?sort=asc`);
         const responseData = await response.json();
         setLoadedReviews(responseData.reviews);
       } 
       else {
+        console.log('in not sorted');
         fetchReviews();
       } 
       setIsLoading(false);

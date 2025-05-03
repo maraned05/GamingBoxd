@@ -55,10 +55,12 @@ function MainPage (props) {
     }
 
     function pressEditReviewButtonHandler (newReviewData) {
+        console.log(newReviewData.id);
         props.onEditReview(newReviewData);
     }
 
     function openEditFormHandler (reviewData) {
+        console.log(reviewData.id);
         setIsEditOpen(true);
         setEditFormContent(<EditForm setIsEditOpen = {setIsEditOpen} reviewData = {reviewData} 
             onPressEditReviewButton = {pressEditReviewButtonHandler} />)
@@ -84,7 +86,7 @@ function MainPage (props) {
     function openReviewMediaHandler (reviewID) {
         const index = props.reviewsList.findIndex(review => review.id === reviewID);
         const mediaWindow = window.open(`/reviewMedia/${reviewID}`, "_blank");
-        console.log(props.reviewsList[index].media);
+        //console.log(props.reviewsList[index].media);
         mediaWindow["mediaName"] = props.reviewsList[index].media;
     }
 
