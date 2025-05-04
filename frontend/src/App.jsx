@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './pages/MainPage'; 
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 import StatisticsPage from './pages/StatisticsPage';
 import { useConnectivityStatus } from './hooks/useConnectivityStatus';
@@ -8,6 +11,7 @@ import { BACKEND_URL } from './config';
 import ReviewMediaPage from './pages/ReviewMediaPage';
 import { queueOperation, syncPendingOperations } from './syncOperations';
 import {formDataToSerializable, objectToFormData} from './formdataSerialization';
+import { useUser } from "./contexts/UserContext";
 
 function App() {
   const [loadedReviews, setLoadedReviews] = useState([]);
@@ -16,6 +20,7 @@ function App() {
   const [highestRating, setHighestRating] = useState(null);
 
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+  const { user } = useUser();
   
   // useEffect(() => {
   //   if (isOnline && backendStatus === 'ok')
@@ -31,13 +36,12 @@ function App() {
 
   const fetchPaginatedReviews = async (page) => {
       setIsLoading(true);
-      const response = await fetch(`${BACKEND_URL}/reviews?page=${page}&limit=8`);
+      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?page=${page}&limit=8`);
       const responseData = await response.json();
 
       if (responseData.reviews.length === 0) {
-          setHasMore(false); // No more reviews to fetch
+          setHasMore(false); 
       } else {
-          //setLoadedReviews((prevReviews) => [...prevReviews, ...responseData.reviews]);
           setLoadedReviews((prevReviews) => {
             const newReviews = responseData.reviews.filter(
                 (newReview) => !prevReviews.some((review) => review.id === newReview.id)
@@ -49,7 +53,8 @@ function App() {
   };
 
   useEffect(() => {
-      fetchPaginatedReviews(currentPage);
+      if (user)
+        fetchPaginatedReviews(currentPage);
   }, [currentPage]);
 
   const loadMoreReviews = () => {
@@ -62,7 +67,7 @@ function App() {
       setIsLoading(true);
       try {
         let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/reviews`);
+        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}`);
 
         if (! response.ok)
             hasError = true;
@@ -80,22 +85,24 @@ function App() {
   };
 
   const fetchHighestRating = async () => {
-    const response = await fetch(`${BACKEND_URL}/reviews/highestRating`);
+    const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/highestRating`);
     const responseData = await response.json();
     setHighestRating(responseData.highestRating);
   };
 
   const fetchLowestRating = async () => {
-    const response = await fetch(`${BACKEND_URL}/reviews/lowestRating`);
+    const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/lowestRating`);
     const responseData = await response.json();
     setLowestRating(responseData.lowestRating);
   };
 
   useEffect(() => {
-      fetchReviews();
-      fetchHighestRating();
-      fetchLowestRating();
-  }, []);
+      if (user) {
+        fetchReviews();
+        fetchHighestRating();
+        fetchLowestRating();
+      }
+  }, [user]);
 
 const addReviewHandler = async (reviewData) => {
     let newProduct;
@@ -109,7 +116,7 @@ const addReviewHandler = async (reviewData) => {
         newProduct.append("media", reviewData.media);
       }
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/reviews`, {
+      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}`, {
         method: 'POST',
         body: newProduct
       });
@@ -149,7 +156,7 @@ const addReviewHandler = async (reviewData) => {
       console.log("inside edit " + reviewData.id);
       try {
         let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/reviews/${reviewData.id}`, {
+        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/${reviewData.id}`, {
           method: 'PUT',
           body: JSON.stringify(reviewData),
           headers: {
@@ -186,7 +193,7 @@ const addReviewHandler = async (reviewData) => {
   const deleteReviewHandler = async (reviewID) => {
     try {
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/reviews/${reviewID}`, {
+      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/${reviewID}`, {
         method: 'DELETE'
       });
 
@@ -216,7 +223,7 @@ const addReviewHandler = async (reviewData) => {
       setIsLoading(true);
       if (isSorted) {
         console.log('in sorted');
-        const response = await fetch(`${BACKEND_URL}/reviews?sort=asc`);
+        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?sort=asc`);
         const responseData = await response.json();
         setLoadedReviews(responseData.reviews);
       } 
@@ -231,7 +238,7 @@ const addReviewHandler = async (reviewData) => {
     if (textQuery.trim() === "")
         fetchReviews(); 
     else {
-      const response = await fetch(`${BACKEND_URL}/reviews?titleFilter=${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?titleFilter=${textQuery}`);
       const responseData = await response.json();
       setLoadedReviews(responseData.reviews);
     }
@@ -241,35 +248,42 @@ const addReviewHandler = async (reviewData) => {
     if (textQuery.trim() === "")
         fetchReviews();
     else {
-      const response = await fetch(`${BACKEND_URL}/reviews?dateFilter=${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?dateFilter=${textQuery}`);
       const responseData = await response.json();
       setLoadedReviews(responseData.reviews);
     }
   };
 
-
   return (
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element = {
-              isLoading ? <MainPage reviewsList = {[]} /> 
-              :
-              <MainPage reviewsList = {loadedReviews} 
-                onAddReview = {addReviewHandler} 
-                onEditReview = {editReviewHandler} 
-                onDeleteReview = {deleteReviewHandler} 
-                onSorting = {sortingHandler} 
-                onFiltering = {filteringHandler}  
-                onDateFiltering = {dateFilteringHandler}
-                onLoadMore = {loadMoreReviews}
-                highestRating = {highestRating} 
-                lowestRating = {lowestRating} 
-              />
-            } 
-          />
-          <Route path='/statistics' element = {<StatisticsPage  />}/>
-          <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
-        </Routes>
+          <Routes>
+            <Route path='/' element = {<LoginPage />} />
+            <Route path='/registerPage' element = {<RegisterPage />} />
+            <Route path='/mainPage' element = {
+                isLoading ? <MainPage reviewsList = {[]} /> 
+                :
+                !user ? 
+                <div style={{width: 700, height: 700, textAlign: 'center', fontSize: 30}}>
+                  Authorization denied!
+                </div>
+                :
+                <MainPage reviewsList = {loadedReviews} 
+                  onAddReview = {addReviewHandler} 
+                  onEditReview = {editReviewHandler} 
+                  onDeleteReview = {deleteReviewHandler} 
+                  onSorting = {sortingHandler} 
+                  onFiltering = {filteringHandler}  
+                  onDateFiltering = {dateFilteringHandler}
+                  onLoadMore = {loadMoreReviews}
+                  highestRating = {highestRating} 
+                  lowestRating = {lowestRating} 
+                />
+              } 
+            />
+            <Route path='/statistics' element = {<StatisticsPage  />}/>
+            <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
+            <Route path='/adminDashboard' element = {<AdminDashboard  />}/>
+          </Routes>
       </BrowserRouter>
     );
 }

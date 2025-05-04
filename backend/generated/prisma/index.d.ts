@@ -23,6 +23,16 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
+/**
+ * Model Log
+ * 
+ */
+export type Log = $Result.DefaultSelection<Prisma.$LogPayload>
+/**
+ * Model MonitoredUser
+ * 
+ */
+export type MonitoredUser = $Result.DefaultSelection<Prisma.$MonitoredUserPayload>
 
 /**
  * Enums
@@ -185,6 +195,26 @@ export class PrismaClient<
     * ```
     */
   get review(): Prisma.ReviewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.log`: Exposes CRUD operations for the **Log** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Logs
+    * const logs = await prisma.log.findMany()
+    * ```
+    */
+  get log(): Prisma.LogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monitoredUser`: Exposes CRUD operations for the **MonitoredUser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonitoredUsers
+    * const monitoredUsers = await prisma.monitoredUser.findMany()
+    * ```
+    */
+  get monitoredUser(): Prisma.MonitoredUserDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -626,7 +656,9 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Review: 'Review'
+    Review: 'Review',
+    Log: 'Log',
+    MonitoredUser: 'MonitoredUser'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -645,7 +677,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "review"
+      modelProps: "user" | "review" | "log" | "monitoredUser"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -797,6 +829,154 @@ export namespace Prisma {
           }
         }
       }
+      Log: {
+        payload: Prisma.$LogPayload<ExtArgs>
+        fields: Prisma.LogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          findFirst: {
+            args: Prisma.LogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          findMany: {
+            args: Prisma.LogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>[]
+          }
+          create: {
+            args: Prisma.LogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          createMany: {
+            args: Prisma.LogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>[]
+          }
+          delete: {
+            args: Prisma.LogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          update: {
+            args: Prisma.LogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          deleteMany: {
+            args: Prisma.LogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>[]
+          }
+          upsert: {
+            args: Prisma.LogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LogPayload>
+          }
+          aggregate: {
+            args: Prisma.LogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLog>
+          }
+          groupBy: {
+            args: Prisma.LogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LogCountArgs<ExtArgs>
+            result: $Utils.Optional<LogCountAggregateOutputType> | number
+          }
+        }
+      }
+      MonitoredUser: {
+        payload: Prisma.$MonitoredUserPayload<ExtArgs>
+        fields: Prisma.MonitoredUserFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonitoredUserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonitoredUserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          findFirst: {
+            args: Prisma.MonitoredUserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonitoredUserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          findMany: {
+            args: Prisma.MonitoredUserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>[]
+          }
+          create: {
+            args: Prisma.MonitoredUserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          createMany: {
+            args: Prisma.MonitoredUserCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonitoredUserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>[]
+          }
+          delete: {
+            args: Prisma.MonitoredUserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          update: {
+            args: Prisma.MonitoredUserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonitoredUserDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonitoredUserUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonitoredUserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>[]
+          }
+          upsert: {
+            args: Prisma.MonitoredUserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonitoredUserPayload>
+          }
+          aggregate: {
+            args: Prisma.MonitoredUserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonitoredUser>
+          }
+          groupBy: {
+            args: Prisma.MonitoredUserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonitoredUserGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonitoredUserCountArgs<ExtArgs>
+            result: $Utils.Optional<MonitoredUserCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -883,6 +1063,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     review?: ReviewOmit
+    log?: LogOmit
+    monitoredUser?: MonitoredUserOmit
   }
 
   /* Types for Logging */
@@ -3175,6 +3357,1944 @@ export namespace Prisma {
 
 
   /**
+   * Model Log
+   */
+
+  export type AggregateLog = {
+    _count: LogCountAggregateOutputType | null
+    _min: LogMinAggregateOutputType | null
+    _max: LogMaxAggregateOutputType | null
+  }
+
+  export type LogMinAggregateOutputType = {
+    id: string | null
+    username: string | null
+    action: string | null
+    createdAt: Date | null
+  }
+
+  export type LogMaxAggregateOutputType = {
+    id: string | null
+    username: string | null
+    action: string | null
+    createdAt: Date | null
+  }
+
+  export type LogCountAggregateOutputType = {
+    id: number
+    username: number
+    action: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LogMinAggregateInputType = {
+    id?: true
+    username?: true
+    action?: true
+    createdAt?: true
+  }
+
+  export type LogMaxAggregateInputType = {
+    id?: true
+    username?: true
+    action?: true
+    createdAt?: true
+  }
+
+  export type LogCountAggregateInputType = {
+    id?: true
+    username?: true
+    action?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Log to aggregate.
+     */
+    where?: LogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Logs to fetch.
+     */
+    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Logs
+    **/
+    _count?: true | LogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LogMaxAggregateInputType
+  }
+
+  export type GetLogAggregateType<T extends LogAggregateArgs> = {
+        [P in keyof T & keyof AggregateLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLog[P]>
+      : GetScalarType<T[P], AggregateLog[P]>
+  }
+
+
+
+
+  export type LogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LogWhereInput
+    orderBy?: LogOrderByWithAggregationInput | LogOrderByWithAggregationInput[]
+    by: LogScalarFieldEnum[] | LogScalarFieldEnum
+    having?: LogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LogCountAggregateInputType | true
+    _min?: LogMinAggregateInputType
+    _max?: LogMaxAggregateInputType
+  }
+
+  export type LogGroupByOutputType = {
+    id: string
+    username: string
+    action: string
+    createdAt: Date
+    _count: LogCountAggregateOutputType | null
+    _min: LogMinAggregateOutputType | null
+    _max: LogMaxAggregateOutputType | null
+  }
+
+  type GetLogGroupByPayload<T extends LogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LogGroupByOutputType[P]>
+            : GetScalarType<T[P], LogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    username?: boolean
+    action?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["log"]>
+
+  export type LogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    username?: boolean
+    action?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["log"]>
+
+  export type LogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    username?: boolean
+    action?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["log"]>
+
+  export type LogSelectScalar = {
+    id?: boolean
+    username?: boolean
+    action?: boolean
+    createdAt?: boolean
+  }
+
+  export type LogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "action" | "createdAt", ExtArgs["result"]["log"]>
+
+  export type $LogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Log"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      username: string
+      action: string
+      createdAt: Date
+    }, ExtArgs["result"]["log"]>
+    composites: {}
+  }
+
+  type LogGetPayload<S extends boolean | null | undefined | LogDefaultArgs> = $Result.GetResult<Prisma.$LogPayload, S>
+
+  type LogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LogCountAggregateInputType | true
+    }
+
+  export interface LogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Log'], meta: { name: 'Log' } }
+    /**
+     * Find zero or one Log that matches the filter.
+     * @param {LogFindUniqueArgs} args - Arguments to find a Log
+     * @example
+     * // Get one Log
+     * const log = await prisma.log.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LogFindUniqueArgs>(args: SelectSubset<T, LogFindUniqueArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Log that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LogFindUniqueOrThrowArgs} args - Arguments to find a Log
+     * @example
+     * // Get one Log
+     * const log = await prisma.log.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LogFindUniqueOrThrowArgs>(args: SelectSubset<T, LogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Log that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogFindFirstArgs} args - Arguments to find a Log
+     * @example
+     * // Get one Log
+     * const log = await prisma.log.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LogFindFirstArgs>(args?: SelectSubset<T, LogFindFirstArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Log that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogFindFirstOrThrowArgs} args - Arguments to find a Log
+     * @example
+     * // Get one Log
+     * const log = await prisma.log.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LogFindFirstOrThrowArgs>(args?: SelectSubset<T, LogFindFirstOrThrowArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Logs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Logs
+     * const logs = await prisma.log.findMany()
+     * 
+     * // Get first 10 Logs
+     * const logs = await prisma.log.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const logWithIdOnly = await prisma.log.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LogFindManyArgs>(args?: SelectSubset<T, LogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Log.
+     * @param {LogCreateArgs} args - Arguments to create a Log.
+     * @example
+     * // Create one Log
+     * const Log = await prisma.log.create({
+     *   data: {
+     *     // ... data to create a Log
+     *   }
+     * })
+     * 
+     */
+    create<T extends LogCreateArgs>(args: SelectSubset<T, LogCreateArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Logs.
+     * @param {LogCreateManyArgs} args - Arguments to create many Logs.
+     * @example
+     * // Create many Logs
+     * const log = await prisma.log.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LogCreateManyArgs>(args?: SelectSubset<T, LogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Logs and returns the data saved in the database.
+     * @param {LogCreateManyAndReturnArgs} args - Arguments to create many Logs.
+     * @example
+     * // Create many Logs
+     * const log = await prisma.log.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Logs and only return the `id`
+     * const logWithIdOnly = await prisma.log.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LogCreateManyAndReturnArgs>(args?: SelectSubset<T, LogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Log.
+     * @param {LogDeleteArgs} args - Arguments to delete one Log.
+     * @example
+     * // Delete one Log
+     * const Log = await prisma.log.delete({
+     *   where: {
+     *     // ... filter to delete one Log
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LogDeleteArgs>(args: SelectSubset<T, LogDeleteArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Log.
+     * @param {LogUpdateArgs} args - Arguments to update one Log.
+     * @example
+     * // Update one Log
+     * const log = await prisma.log.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LogUpdateArgs>(args: SelectSubset<T, LogUpdateArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Logs.
+     * @param {LogDeleteManyArgs} args - Arguments to filter Logs to delete.
+     * @example
+     * // Delete a few Logs
+     * const { count } = await prisma.log.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LogDeleteManyArgs>(args?: SelectSubset<T, LogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Logs
+     * const log = await prisma.log.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LogUpdateManyArgs>(args: SelectSubset<T, LogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Logs and returns the data updated in the database.
+     * @param {LogUpdateManyAndReturnArgs} args - Arguments to update many Logs.
+     * @example
+     * // Update many Logs
+     * const log = await prisma.log.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Logs and only return the `id`
+     * const logWithIdOnly = await prisma.log.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LogUpdateManyAndReturnArgs>(args: SelectSubset<T, LogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Log.
+     * @param {LogUpsertArgs} args - Arguments to update or create a Log.
+     * @example
+     * // Update or create a Log
+     * const log = await prisma.log.upsert({
+     *   create: {
+     *     // ... data to create a Log
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Log we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LogUpsertArgs>(args: SelectSubset<T, LogUpsertArgs<ExtArgs>>): Prisma__LogClient<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogCountArgs} args - Arguments to filter Logs to count.
+     * @example
+     * // Count the number of Logs
+     * const count = await prisma.log.count({
+     *   where: {
+     *     // ... the filter for the Logs we want to count
+     *   }
+     * })
+    **/
+    count<T extends LogCountArgs>(
+      args?: Subset<T, LogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LogAggregateArgs>(args: Subset<T, LogAggregateArgs>): Prisma.PrismaPromise<GetLogAggregateType<T>>
+
+    /**
+     * Group by Log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LogGroupByArgs['orderBy'] }
+        : { orderBy?: LogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Log model
+   */
+  readonly fields: LogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Log.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Log model
+   */
+  interface LogFieldRefs {
+    readonly id: FieldRef<"Log", 'String'>
+    readonly username: FieldRef<"Log", 'String'>
+    readonly action: FieldRef<"Log", 'String'>
+    readonly createdAt: FieldRef<"Log", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Log findUnique
+   */
+  export type LogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter, which Log to fetch.
+     */
+    where: LogWhereUniqueInput
+  }
+
+  /**
+   * Log findUniqueOrThrow
+   */
+  export type LogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter, which Log to fetch.
+     */
+    where: LogWhereUniqueInput
+  }
+
+  /**
+   * Log findFirst
+   */
+  export type LogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter, which Log to fetch.
+     */
+    where?: LogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Logs to fetch.
+     */
+    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Logs.
+     */
+    cursor?: LogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Logs.
+     */
+    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
+  }
+
+  /**
+   * Log findFirstOrThrow
+   */
+  export type LogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter, which Log to fetch.
+     */
+    where?: LogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Logs to fetch.
+     */
+    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Logs.
+     */
+    cursor?: LogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Logs.
+     */
+    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
+  }
+
+  /**
+   * Log findMany
+   */
+  export type LogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter, which Logs to fetch.
+     */
+    where?: LogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Logs to fetch.
+     */
+    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Logs.
+     */
+    cursor?: LogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Logs.
+     */
+    skip?: number
+    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
+  }
+
+  /**
+   * Log create
+   */
+  export type LogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Log.
+     */
+    data: XOR<LogCreateInput, LogUncheckedCreateInput>
+  }
+
+  /**
+   * Log createMany
+   */
+  export type LogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Logs.
+     */
+    data: LogCreateManyInput | LogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Log createManyAndReturn
+   */
+  export type LogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * The data used to create many Logs.
+     */
+    data: LogCreateManyInput | LogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Log update
+   */
+  export type LogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Log.
+     */
+    data: XOR<LogUpdateInput, LogUncheckedUpdateInput>
+    /**
+     * Choose, which Log to update.
+     */
+    where: LogWhereUniqueInput
+  }
+
+  /**
+   * Log updateMany
+   */
+  export type LogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Logs.
+     */
+    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyInput>
+    /**
+     * Filter which Logs to update
+     */
+    where?: LogWhereInput
+    /**
+     * Limit how many Logs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Log updateManyAndReturn
+   */
+  export type LogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * The data used to update Logs.
+     */
+    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyInput>
+    /**
+     * Filter which Logs to update
+     */
+    where?: LogWhereInput
+    /**
+     * Limit how many Logs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Log upsert
+   */
+  export type LogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Log to update in case it exists.
+     */
+    where: LogWhereUniqueInput
+    /**
+     * In case the Log found by the `where` argument doesn't exist, create a new Log with this data.
+     */
+    create: XOR<LogCreateInput, LogUncheckedCreateInput>
+    /**
+     * In case the Log was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LogUpdateInput, LogUncheckedUpdateInput>
+  }
+
+  /**
+   * Log delete
+   */
+  export type LogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+    /**
+     * Filter which Log to delete.
+     */
+    where: LogWhereUniqueInput
+  }
+
+  /**
+   * Log deleteMany
+   */
+  export type LogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Logs to delete
+     */
+    where?: LogWhereInput
+    /**
+     * Limit how many Logs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Log without action
+   */
+  export type LogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Log
+     */
+    select?: LogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Log
+     */
+    omit?: LogOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MonitoredUser
+   */
+
+  export type AggregateMonitoredUser = {
+    _count: MonitoredUserCountAggregateOutputType | null
+    _min: MonitoredUserMinAggregateOutputType | null
+    _max: MonitoredUserMaxAggregateOutputType | null
+  }
+
+  export type MonitoredUserMinAggregateOutputType = {
+    username: string | null
+    lastDetected: Date | null
+  }
+
+  export type MonitoredUserMaxAggregateOutputType = {
+    username: string | null
+    lastDetected: Date | null
+  }
+
+  export type MonitoredUserCountAggregateOutputType = {
+    username: number
+    lastDetected: number
+    _all: number
+  }
+
+
+  export type MonitoredUserMinAggregateInputType = {
+    username?: true
+    lastDetected?: true
+  }
+
+  export type MonitoredUserMaxAggregateInputType = {
+    username?: true
+    lastDetected?: true
+  }
+
+  export type MonitoredUserCountAggregateInputType = {
+    username?: true
+    lastDetected?: true
+    _all?: true
+  }
+
+  export type MonitoredUserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonitoredUser to aggregate.
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonitoredUsers to fetch.
+     */
+    orderBy?: MonitoredUserOrderByWithRelationInput | MonitoredUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonitoredUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonitoredUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonitoredUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonitoredUsers
+    **/
+    _count?: true | MonitoredUserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonitoredUserMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonitoredUserMaxAggregateInputType
+  }
+
+  export type GetMonitoredUserAggregateType<T extends MonitoredUserAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonitoredUser]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonitoredUser[P]>
+      : GetScalarType<T[P], AggregateMonitoredUser[P]>
+  }
+
+
+
+
+  export type MonitoredUserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonitoredUserWhereInput
+    orderBy?: MonitoredUserOrderByWithAggregationInput | MonitoredUserOrderByWithAggregationInput[]
+    by: MonitoredUserScalarFieldEnum[] | MonitoredUserScalarFieldEnum
+    having?: MonitoredUserScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonitoredUserCountAggregateInputType | true
+    _min?: MonitoredUserMinAggregateInputType
+    _max?: MonitoredUserMaxAggregateInputType
+  }
+
+  export type MonitoredUserGroupByOutputType = {
+    username: string
+    lastDetected: Date
+    _count: MonitoredUserCountAggregateOutputType | null
+    _min: MonitoredUserMinAggregateOutputType | null
+    _max: MonitoredUserMaxAggregateOutputType | null
+  }
+
+  type GetMonitoredUserGroupByPayload<T extends MonitoredUserGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonitoredUserGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonitoredUserGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonitoredUserGroupByOutputType[P]>
+            : GetScalarType<T[P], MonitoredUserGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonitoredUserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    username?: boolean
+    lastDetected?: boolean
+  }, ExtArgs["result"]["monitoredUser"]>
+
+  export type MonitoredUserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    username?: boolean
+    lastDetected?: boolean
+  }, ExtArgs["result"]["monitoredUser"]>
+
+  export type MonitoredUserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    username?: boolean
+    lastDetected?: boolean
+  }, ExtArgs["result"]["monitoredUser"]>
+
+  export type MonitoredUserSelectScalar = {
+    username?: boolean
+    lastDetected?: boolean
+  }
+
+  export type MonitoredUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"username" | "lastDetected", ExtArgs["result"]["monitoredUser"]>
+
+  export type $MonitoredUserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonitoredUser"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      username: string
+      lastDetected: Date
+    }, ExtArgs["result"]["monitoredUser"]>
+    composites: {}
+  }
+
+  type MonitoredUserGetPayload<S extends boolean | null | undefined | MonitoredUserDefaultArgs> = $Result.GetResult<Prisma.$MonitoredUserPayload, S>
+
+  type MonitoredUserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonitoredUserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonitoredUserCountAggregateInputType | true
+    }
+
+  export interface MonitoredUserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonitoredUser'], meta: { name: 'MonitoredUser' } }
+    /**
+     * Find zero or one MonitoredUser that matches the filter.
+     * @param {MonitoredUserFindUniqueArgs} args - Arguments to find a MonitoredUser
+     * @example
+     * // Get one MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonitoredUserFindUniqueArgs>(args: SelectSubset<T, MonitoredUserFindUniqueArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonitoredUser that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonitoredUserFindUniqueOrThrowArgs} args - Arguments to find a MonitoredUser
+     * @example
+     * // Get one MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonitoredUserFindUniqueOrThrowArgs>(args: SelectSubset<T, MonitoredUserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonitoredUser that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserFindFirstArgs} args - Arguments to find a MonitoredUser
+     * @example
+     * // Get one MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonitoredUserFindFirstArgs>(args?: SelectSubset<T, MonitoredUserFindFirstArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonitoredUser that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserFindFirstOrThrowArgs} args - Arguments to find a MonitoredUser
+     * @example
+     * // Get one MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonitoredUserFindFirstOrThrowArgs>(args?: SelectSubset<T, MonitoredUserFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonitoredUsers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonitoredUsers
+     * const monitoredUsers = await prisma.monitoredUser.findMany()
+     * 
+     * // Get first 10 MonitoredUsers
+     * const monitoredUsers = await prisma.monitoredUser.findMany({ take: 10 })
+     * 
+     * // Only select the `username`
+     * const monitoredUserWithUsernameOnly = await prisma.monitoredUser.findMany({ select: { username: true } })
+     * 
+     */
+    findMany<T extends MonitoredUserFindManyArgs>(args?: SelectSubset<T, MonitoredUserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonitoredUser.
+     * @param {MonitoredUserCreateArgs} args - Arguments to create a MonitoredUser.
+     * @example
+     * // Create one MonitoredUser
+     * const MonitoredUser = await prisma.monitoredUser.create({
+     *   data: {
+     *     // ... data to create a MonitoredUser
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonitoredUserCreateArgs>(args: SelectSubset<T, MonitoredUserCreateArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonitoredUsers.
+     * @param {MonitoredUserCreateManyArgs} args - Arguments to create many MonitoredUsers.
+     * @example
+     * // Create many MonitoredUsers
+     * const monitoredUser = await prisma.monitoredUser.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonitoredUserCreateManyArgs>(args?: SelectSubset<T, MonitoredUserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonitoredUsers and returns the data saved in the database.
+     * @param {MonitoredUserCreateManyAndReturnArgs} args - Arguments to create many MonitoredUsers.
+     * @example
+     * // Create many MonitoredUsers
+     * const monitoredUser = await prisma.monitoredUser.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonitoredUsers and only return the `username`
+     * const monitoredUserWithUsernameOnly = await prisma.monitoredUser.createManyAndReturn({
+     *   select: { username: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonitoredUserCreateManyAndReturnArgs>(args?: SelectSubset<T, MonitoredUserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonitoredUser.
+     * @param {MonitoredUserDeleteArgs} args - Arguments to delete one MonitoredUser.
+     * @example
+     * // Delete one MonitoredUser
+     * const MonitoredUser = await prisma.monitoredUser.delete({
+     *   where: {
+     *     // ... filter to delete one MonitoredUser
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonitoredUserDeleteArgs>(args: SelectSubset<T, MonitoredUserDeleteArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonitoredUser.
+     * @param {MonitoredUserUpdateArgs} args - Arguments to update one MonitoredUser.
+     * @example
+     * // Update one MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonitoredUserUpdateArgs>(args: SelectSubset<T, MonitoredUserUpdateArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonitoredUsers.
+     * @param {MonitoredUserDeleteManyArgs} args - Arguments to filter MonitoredUsers to delete.
+     * @example
+     * // Delete a few MonitoredUsers
+     * const { count } = await prisma.monitoredUser.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonitoredUserDeleteManyArgs>(args?: SelectSubset<T, MonitoredUserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonitoredUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonitoredUsers
+     * const monitoredUser = await prisma.monitoredUser.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonitoredUserUpdateManyArgs>(args: SelectSubset<T, MonitoredUserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonitoredUsers and returns the data updated in the database.
+     * @param {MonitoredUserUpdateManyAndReturnArgs} args - Arguments to update many MonitoredUsers.
+     * @example
+     * // Update many MonitoredUsers
+     * const monitoredUser = await prisma.monitoredUser.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonitoredUsers and only return the `username`
+     * const monitoredUserWithUsernameOnly = await prisma.monitoredUser.updateManyAndReturn({
+     *   select: { username: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonitoredUserUpdateManyAndReturnArgs>(args: SelectSubset<T, MonitoredUserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonitoredUser.
+     * @param {MonitoredUserUpsertArgs} args - Arguments to update or create a MonitoredUser.
+     * @example
+     * // Update or create a MonitoredUser
+     * const monitoredUser = await prisma.monitoredUser.upsert({
+     *   create: {
+     *     // ... data to create a MonitoredUser
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonitoredUser we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonitoredUserUpsertArgs>(args: SelectSubset<T, MonitoredUserUpsertArgs<ExtArgs>>): Prisma__MonitoredUserClient<$Result.GetResult<Prisma.$MonitoredUserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonitoredUsers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserCountArgs} args - Arguments to filter MonitoredUsers to count.
+     * @example
+     * // Count the number of MonitoredUsers
+     * const count = await prisma.monitoredUser.count({
+     *   where: {
+     *     // ... the filter for the MonitoredUsers we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonitoredUserCountArgs>(
+      args?: Subset<T, MonitoredUserCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonitoredUserCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonitoredUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonitoredUserAggregateArgs>(args: Subset<T, MonitoredUserAggregateArgs>): Prisma.PrismaPromise<GetMonitoredUserAggregateType<T>>
+
+    /**
+     * Group by MonitoredUser.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonitoredUserGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonitoredUserGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonitoredUserGroupByArgs['orderBy'] }
+        : { orderBy?: MonitoredUserGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonitoredUserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonitoredUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonitoredUser model
+   */
+  readonly fields: MonitoredUserFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonitoredUser.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonitoredUserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonitoredUser model
+   */
+  interface MonitoredUserFieldRefs {
+    readonly username: FieldRef<"MonitoredUser", 'String'>
+    readonly lastDetected: FieldRef<"MonitoredUser", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonitoredUser findUnique
+   */
+  export type MonitoredUserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter, which MonitoredUser to fetch.
+     */
+    where: MonitoredUserWhereUniqueInput
+  }
+
+  /**
+   * MonitoredUser findUniqueOrThrow
+   */
+  export type MonitoredUserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter, which MonitoredUser to fetch.
+     */
+    where: MonitoredUserWhereUniqueInput
+  }
+
+  /**
+   * MonitoredUser findFirst
+   */
+  export type MonitoredUserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter, which MonitoredUser to fetch.
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonitoredUsers to fetch.
+     */
+    orderBy?: MonitoredUserOrderByWithRelationInput | MonitoredUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonitoredUsers.
+     */
+    cursor?: MonitoredUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonitoredUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonitoredUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonitoredUsers.
+     */
+    distinct?: MonitoredUserScalarFieldEnum | MonitoredUserScalarFieldEnum[]
+  }
+
+  /**
+   * MonitoredUser findFirstOrThrow
+   */
+  export type MonitoredUserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter, which MonitoredUser to fetch.
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonitoredUsers to fetch.
+     */
+    orderBy?: MonitoredUserOrderByWithRelationInput | MonitoredUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonitoredUsers.
+     */
+    cursor?: MonitoredUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonitoredUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonitoredUsers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonitoredUsers.
+     */
+    distinct?: MonitoredUserScalarFieldEnum | MonitoredUserScalarFieldEnum[]
+  }
+
+  /**
+   * MonitoredUser findMany
+   */
+  export type MonitoredUserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter, which MonitoredUsers to fetch.
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonitoredUsers to fetch.
+     */
+    orderBy?: MonitoredUserOrderByWithRelationInput | MonitoredUserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonitoredUsers.
+     */
+    cursor?: MonitoredUserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonitoredUsers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonitoredUsers.
+     */
+    skip?: number
+    distinct?: MonitoredUserScalarFieldEnum | MonitoredUserScalarFieldEnum[]
+  }
+
+  /**
+   * MonitoredUser create
+   */
+  export type MonitoredUserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * The data needed to create a MonitoredUser.
+     */
+    data: XOR<MonitoredUserCreateInput, MonitoredUserUncheckedCreateInput>
+  }
+
+  /**
+   * MonitoredUser createMany
+   */
+  export type MonitoredUserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonitoredUsers.
+     */
+    data: MonitoredUserCreateManyInput | MonitoredUserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonitoredUser createManyAndReturn
+   */
+  export type MonitoredUserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonitoredUsers.
+     */
+    data: MonitoredUserCreateManyInput | MonitoredUserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonitoredUser update
+   */
+  export type MonitoredUserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * The data needed to update a MonitoredUser.
+     */
+    data: XOR<MonitoredUserUpdateInput, MonitoredUserUncheckedUpdateInput>
+    /**
+     * Choose, which MonitoredUser to update.
+     */
+    where: MonitoredUserWhereUniqueInput
+  }
+
+  /**
+   * MonitoredUser updateMany
+   */
+  export type MonitoredUserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonitoredUsers.
+     */
+    data: XOR<MonitoredUserUpdateManyMutationInput, MonitoredUserUncheckedUpdateManyInput>
+    /**
+     * Filter which MonitoredUsers to update
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * Limit how many MonitoredUsers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonitoredUser updateManyAndReturn
+   */
+  export type MonitoredUserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * The data used to update MonitoredUsers.
+     */
+    data: XOR<MonitoredUserUpdateManyMutationInput, MonitoredUserUncheckedUpdateManyInput>
+    /**
+     * Filter which MonitoredUsers to update
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * Limit how many MonitoredUsers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonitoredUser upsert
+   */
+  export type MonitoredUserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * The filter to search for the MonitoredUser to update in case it exists.
+     */
+    where: MonitoredUserWhereUniqueInput
+    /**
+     * In case the MonitoredUser found by the `where` argument doesn't exist, create a new MonitoredUser with this data.
+     */
+    create: XOR<MonitoredUserCreateInput, MonitoredUserUncheckedCreateInput>
+    /**
+     * In case the MonitoredUser was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonitoredUserUpdateInput, MonitoredUserUncheckedUpdateInput>
+  }
+
+  /**
+   * MonitoredUser delete
+   */
+  export type MonitoredUserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+    /**
+     * Filter which MonitoredUser to delete.
+     */
+    where: MonitoredUserWhereUniqueInput
+  }
+
+  /**
+   * MonitoredUser deleteMany
+   */
+  export type MonitoredUserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonitoredUsers to delete
+     */
+    where?: MonitoredUserWhereInput
+    /**
+     * Limit how many MonitoredUsers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonitoredUser without action
+   */
+  export type MonitoredUserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonitoredUser
+     */
+    select?: MonitoredUserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonitoredUser
+     */
+    omit?: MonitoredUserOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -3211,6 +5331,24 @@ export namespace Prisma {
   };
 
   export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+  export const LogScalarFieldEnum: {
+    id: 'id',
+    username: 'username',
+    action: 'action',
+    createdAt: 'createdAt'
+  };
+
+  export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
+
+
+  export const MonitoredUserScalarFieldEnum: {
+    username: 'username',
+    lastDetected: 'lastDetected'
+  };
+
+  export type MonitoredUserScalarFieldEnum = (typeof MonitoredUserScalarFieldEnum)[keyof typeof MonitoredUserScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3426,6 +5564,90 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Review"> | string
   }
 
+  export type LogWhereInput = {
+    AND?: LogWhereInput | LogWhereInput[]
+    OR?: LogWhereInput[]
+    NOT?: LogWhereInput | LogWhereInput[]
+    id?: StringFilter<"Log"> | string
+    username?: StringFilter<"Log"> | string
+    action?: StringFilter<"Log"> | string
+    createdAt?: DateTimeFilter<"Log"> | Date | string
+  }
+
+  export type LogOrderByWithRelationInput = {
+    id?: SortOrder
+    username?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LogWhereInput | LogWhereInput[]
+    OR?: LogWhereInput[]
+    NOT?: LogWhereInput | LogWhereInput[]
+    username?: StringFilter<"Log"> | string
+    action?: StringFilter<"Log"> | string
+    createdAt?: DateTimeFilter<"Log"> | Date | string
+  }, "id">
+
+  export type LogOrderByWithAggregationInput = {
+    id?: SortOrder
+    username?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+    _count?: LogCountOrderByAggregateInput
+    _max?: LogMaxOrderByAggregateInput
+    _min?: LogMinOrderByAggregateInput
+  }
+
+  export type LogScalarWhereWithAggregatesInput = {
+    AND?: LogScalarWhereWithAggregatesInput | LogScalarWhereWithAggregatesInput[]
+    OR?: LogScalarWhereWithAggregatesInput[]
+    NOT?: LogScalarWhereWithAggregatesInput | LogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Log"> | string
+    username?: StringWithAggregatesFilter<"Log"> | string
+    action?: StringWithAggregatesFilter<"Log"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Log"> | Date | string
+  }
+
+  export type MonitoredUserWhereInput = {
+    AND?: MonitoredUserWhereInput | MonitoredUserWhereInput[]
+    OR?: MonitoredUserWhereInput[]
+    NOT?: MonitoredUserWhereInput | MonitoredUserWhereInput[]
+    username?: StringFilter<"MonitoredUser"> | string
+    lastDetected?: DateTimeFilter<"MonitoredUser"> | Date | string
+  }
+
+  export type MonitoredUserOrderByWithRelationInput = {
+    username?: SortOrder
+    lastDetected?: SortOrder
+  }
+
+  export type MonitoredUserWhereUniqueInput = Prisma.AtLeast<{
+    username?: string
+    AND?: MonitoredUserWhereInput | MonitoredUserWhereInput[]
+    OR?: MonitoredUserWhereInput[]
+    NOT?: MonitoredUserWhereInput | MonitoredUserWhereInput[]
+    lastDetected?: DateTimeFilter<"MonitoredUser"> | Date | string
+  }, "username">
+
+  export type MonitoredUserOrderByWithAggregationInput = {
+    username?: SortOrder
+    lastDetected?: SortOrder
+    _count?: MonitoredUserCountOrderByAggregateInput
+    _max?: MonitoredUserMaxOrderByAggregateInput
+    _min?: MonitoredUserMinOrderByAggregateInput
+  }
+
+  export type MonitoredUserScalarWhereWithAggregatesInput = {
+    AND?: MonitoredUserScalarWhereWithAggregatesInput | MonitoredUserScalarWhereWithAggregatesInput[]
+    OR?: MonitoredUserScalarWhereWithAggregatesInput[]
+    NOT?: MonitoredUserScalarWhereWithAggregatesInput | MonitoredUserScalarWhereWithAggregatesInput[]
+    username?: StringWithAggregatesFilter<"MonitoredUser"> | string
+    lastDetected?: DateTimeWithAggregatesFilter<"MonitoredUser"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -3560,6 +5782,90 @@ export namespace Prisma {
     media?: NullableStringFieldUpdateOperationsInput | string | null
     date?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LogCreateInput = {
+    id?: string
+    username: string
+    action: string
+    createdAt?: Date | string
+  }
+
+  export type LogUncheckedCreateInput = {
+    id?: string
+    username: string
+    action: string
+    createdAt?: Date | string
+  }
+
+  export type LogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LogCreateManyInput = {
+    id?: string
+    username: string
+    action: string
+    createdAt?: Date | string
+  }
+
+  export type LogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonitoredUserCreateInput = {
+    username: string
+    lastDetected?: Date | string
+  }
+
+  export type MonitoredUserUncheckedCreateInput = {
+    username: string
+    lastDetected?: Date | string
+  }
+
+  export type MonitoredUserUpdateInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    lastDetected?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonitoredUserUncheckedUpdateInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    lastDetected?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonitoredUserCreateManyInput = {
+    username: string
+    lastDetected?: Date | string
+  }
+
+  export type MonitoredUserUpdateManyMutationInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    lastDetected?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonitoredUserUncheckedUpdateManyInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    lastDetected?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -3745,6 +6051,42 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type LogCountOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LogMinOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    action?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MonitoredUserCountOrderByAggregateInput = {
+    username?: SortOrder
+    lastDetected?: SortOrder
+  }
+
+  export type MonitoredUserMaxOrderByAggregateInput = {
+    username?: SortOrder
+    lastDetected?: SortOrder
+  }
+
+  export type MonitoredUserMinOrderByAggregateInput = {
+    username?: SortOrder
+    lastDetected?: SortOrder
   }
 
   export type ReviewCreateNestedManyWithoutUserInput = {

@@ -1,0 +1,47 @@
+.monitored-users-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    color: #2d2d2d;
+    text-align: center;
+}
+
+.monitored-users-container h2 {
+    color: #6a0dad;
+    margin-bottom: 20px;
+}
+
+.error {
+    color: #ff4b5c;
+    font-weight: bold;
+}
+
+.user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-card {
+    background-color: #ffffffaa;
+    border: 2px solid #a18cd1;
+    border-radius: 12px;
+    margin: 10px 0;
+    padding: 15px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.user-card:hover {
+    background-color: #f3d1f4;
+}
+
+.user-card strong {
+    display: block;
+    font-size: 1.2em;
+    color: #6a0dad;
+}
+  

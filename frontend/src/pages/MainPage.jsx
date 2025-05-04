@@ -13,6 +13,8 @@ import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsBu
 import SearchBarDate from "../components/SearchBar/SearchBarDate";
 import { useConnectivityStatus } from '../hooks/useConnectivityStatus';
 import { BACKEND_URL } from '../config';
+import { useUser } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function MainPage (props) {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -20,6 +22,9 @@ function MainPage (props) {
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
     const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
+    const { user, setUser } = useUser();
+    const [userOpen, setUserOpen] = useState(false);
+    const navigate = useNavigate();
 
     //Scroll
     const reviewsGridRef = useRef(null);
@@ -94,9 +99,29 @@ function MainPage (props) {
         window.open("/statistics", "_blank");
     }
 
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem("user");
+        navigate("/");
+    };
+
+    const openAdminDashboard = () => {
+        window.open("/adminDashboard");
+    }
+
     return (
         <div>
             <Header />
+            <button className="user-icon" onClick={() => setUserOpen(!userOpen)}> 👤  </button>
+            {userOpen && (
+                <div className="user-dropdown">
+                    <p className="username">Logged in as: <strong>{user.username}</strong></p>
+                    <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                    {user && user.role == 'admin' && (
+                        <button className="dashboard-btn" onClick={openAdminDashboard}>Admin Dashboard</button>
+                    )}
+                </div>
+            )}
             <div className="mainBody">
                 <div className="controlsBar">
                     <div className="leftControls">

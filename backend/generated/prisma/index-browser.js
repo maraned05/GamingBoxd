@@ -139,6 +139,18 @@ exports.Prisma.ReviewScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.LogScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  action: 'action',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MonitoredUserScalarFieldEnum = {
+  username: 'username',
+  lastDetected: 'lastDetected'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -160,7 +172,9 @@ exports.Role = exports.$Enums.Role = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Review: 'Review'
+  Review: 'Review',
+  Log: 'Log',
+  MonitoredUser: 'MonitoredUser'
 };
 
 /**
