@@ -291,5 +291,15 @@ app.get('/admin/:username/monitoredUsers', async (req, res) => {
     res.status(200).json({ users: users });
 });
 
+app.get('/statisticalQuery', async (req, res) => {
+    const stats = await prisma.review.groupBy({
+      by: ['date'],
+      _count: { rating: true },
+      orderBy: { date: 'asc' },
+    });
+    
+    res.status(200).json({ stats: users }); 
+});
+
 
 module.exports = server;

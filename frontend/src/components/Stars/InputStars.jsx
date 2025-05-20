@@ -1,5 +1,5 @@
 import React from "react";
-import './Inputstars.css'
+import './InputStars.css'
 
 function Inputstars (props) {
     return (

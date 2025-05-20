@@ -40,6 +40,9 @@ model Review {
   // Relations
   userId String @map("user_id")
   user User @relation(fields: [userId], references: [id]) 
+
+  @@index([date])
+  @@index([rating])
 }
 
 model Log {

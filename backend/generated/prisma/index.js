@@ -188,17 +188,16 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "postgresql://admin:admin123@localhost:5432/gamingBoxd_db?schema=public"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  user\n  admin\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  role      Role     @default(user)\n  reviews   Review[]\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel Review {\n  id     String  @id @default(uuid())\n  title  String\n  body   String\n  rating String\n  media  String?\n  date   String\n\n  // Relations\n  userId String @map(\"user_id\")\n  user   User   @relation(fields: [userId], references: [id])\n}\n\nmodel Log {\n  id        String   @id @default(uuid())\n  username  String\n  action    String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel MonitoredUser {\n  username     String   @unique\n  lastDetected DateTime @default(now()) @map(\"last_detected\")\n}\n",
-  "inlineSchemaHash": "00fad921cd8c386cfa3186b6fcbaee7fe32d09b27399b6c7c4777db5f39df81c",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  user\n  admin\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  role      Role     @default(user)\n  reviews   Review[]\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel Review {\n  id     String  @id @default(uuid())\n  title  String\n  body   String\n  rating String\n  media  String?\n  date   String\n\n  // Relations\n  userId String @map(\"user_id\")\n  user   User   @relation(fields: [userId], references: [id])\n\n  @@index([date])\n  @@index([rating])\n}\n\nmodel Log {\n  id        String   @id @default(uuid())\n  username  String\n  action    String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel MonitoredUser {\n  username     String   @unique\n  lastDetected DateTime @default(now()) @map(\"last_detected\")\n}\n",
+  "inlineSchemaHash": "ff99c3f9cb9cc4490c15c749e479c322e35de99263ec31367762d2e02bfa0663",
   "copyEngine": true
 }
 
