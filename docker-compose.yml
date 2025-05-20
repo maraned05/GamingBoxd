@@ -1,12 +1,16 @@
 version: '3.8'
 services:
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "80:80"
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://admin:admin123@db:5432/gamingBoxd_db
     depends_on:
