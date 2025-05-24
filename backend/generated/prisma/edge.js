@@ -187,11 +187,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://admin:admin123@localhost:5432/gamingBoxd_db?schema=public"
+        "value": null
       }
     }
   },
