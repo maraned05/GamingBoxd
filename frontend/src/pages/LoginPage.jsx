@@ -14,7 +14,11 @@ function LoginPage (props) {
         e.preventDefault();
         try {
             let hasError = false;
-            const response = await fetch(`${BACKEND_URL}/users/${username}?password=${password}`);
+            const response = await fetch(`${BACKEND_URL}/users/${username}?password=${password}`, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                },
+            });
             if (! response.ok)
                 hasError = true;
 
