@@ -25,10 +25,10 @@ app.use(cors());
 let REVIEWS = [];
 const prisma = new PrismaClient();
 
-const options = {
-  key: fs.readFileSync('./ssl/server.key'),
-  cert: fs.readFileSync('./ssl/server.cert')
-};
+// const options = {
+//   key: fs.readFileSync('./ssl/server.key'),
+//   cert: fs.readFileSync('./ssl/server.cert')
+// };
 
 // Statistics Page Socket
 const server = http.createServer(app);
