@@ -31,7 +31,7 @@ const options = {
 };
 
 // Statistics Page Socket
-const server = http.createServer(options, app);
+const server = http.createServer(app);
 // const io = new Server(server, {
 //     cors: {
 //       origin: FRONTEND_URL,
