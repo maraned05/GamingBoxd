@@ -6,7 +6,6 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { Server } = require('socket.io');
-const { FRONTEND_URL } = require('./utils/config');
 const { v4: uuidv4 } = require('uuid');
 // const { PrismaClient } = require('@prisma/client');
 // const { PrismaClient } = require('../backend/generated/prisma/client');
