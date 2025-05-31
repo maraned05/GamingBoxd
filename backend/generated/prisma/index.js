@@ -171,6 +171,10 @@ const config = {
         "fromEnvVar": null,
         "value": "darwin-arm64",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -188,16 +192,17 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://admin:admin123@localhost:5432/gamingBoxd_db?schema=public"
+        "value": null
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  user\n  admin\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  role      Role     @default(user)\n  reviews   Review[]\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel Review {\n  id     String  @id @default(uuid())\n  title  String\n  body   String\n  rating String\n  media  String?\n  date   String\n\n  // Relations\n  userId String @map(\"user_id\")\n  user   User   @relation(fields: [userId], references: [id])\n\n  @@index([date])\n  @@index([rating])\n}\n\nmodel Log {\n  id        String   @id @default(uuid())\n  username  String\n  action    String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel MonitoredUser {\n  username     String   @unique\n  lastDetected DateTime @default(now()) @map(\"last_detected\")\n}\n",
-  "inlineSchemaHash": "ff99c3f9cb9cc4490c15c749e479c322e35de99263ec31367762d2e02bfa0663",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n  output        = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  user\n  admin\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  username  String   @unique\n  email     String   @unique\n  password  String\n  role      Role     @default(user)\n  reviews   Review[]\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel Review {\n  id     String  @id @default(uuid())\n  title  String\n  body   String\n  rating String\n  media  String?\n  date   String\n\n  // Relations\n  userId String @map(\"user_id\")\n  user   User   @relation(fields: [userId], references: [id])\n\n  @@index([date])\n  @@index([rating])\n}\n\nmodel Log {\n  id        String   @id @default(uuid())\n  username  String\n  action    String\n  createdAt DateTime @default(now()) @map(\"created_at\")\n}\n\nmodel MonitoredUser {\n  username     String   @unique\n  lastDetected DateTime @default(now()) @map(\"last_detected\")\n}\n",
+  "inlineSchemaHash": "ca57b9b2f367127af2b69548bf759df1221a38fd447146ca65d17be3d2eac1a1",
   "copyEngine": true
 }
 
@@ -238,6 +243,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "generated/prisma/libquery_engine-darwin-arm64.dylib.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")
