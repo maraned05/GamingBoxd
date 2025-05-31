@@ -191,12 +191,11 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": null
+        "value": "postgresql://gamingboxd_db_agel_user:4Th3QuVKfq732Tb3BZ2HK0syMYoRcLfs@dpg-d0tl21emcj7s73dlqmig-a.frankfurt-postgres.render.com/gamingboxd_db_agel"
       }
     }
   },
