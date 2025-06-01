@@ -156,7 +156,7 @@ app.get('/reviews/highestRating', auth, async (req, res) => {
     else res.status(200).json({ highestRating: reviews.reduce((max, review) => Math.max(max, review.rating), 1) });
 });
 
-app.post('/reviews/:username', upload.single("media"), auth, async (req, res) => {
+app.post('/reviews', upload.single("media"), auth, async (req, res) => {
     const username = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
