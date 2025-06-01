@@ -252,7 +252,12 @@ const addReviewHandler = async (reviewData) => {
       setIsLoading(true);
       if (isSorted) {
         console.log('in sorted');
-        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?sort=asc`);
+        const response = await fetch(`${BACKEND_URL}/reviews?sort=asc`, {
+          method: 'GET',
+          headers: {
+            ...authService.getAuthHeader()
+          }
+        });
         const responseData = await response.json();
         setLoadedReviews(responseData.reviews);
       } 
@@ -267,7 +272,12 @@ const addReviewHandler = async (reviewData) => {
     if (textQuery.trim() === "")
         fetchReviews(); 
     else {
-      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?titleFilter=${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews?titleFilter=${textQuery}`, {
+          method: 'GET',
+          headers: {
+            ...authService.getAuthHeader()
+          }
+        });
       const responseData = await response.json();
       setLoadedReviews(responseData.reviews);
     }
@@ -277,7 +287,12 @@ const addReviewHandler = async (reviewData) => {
     if (textQuery.trim() === "")
         fetchReviews();
     else {
-      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?dateFilter=${textQuery}`);
+      const response = await fetch(`${BACKEND_URL}/reviews?dateFilter=${textQuery}`, {
+          method: 'GET',
+          headers: {
+            ...authService.getAuthHeader()
+          }
+        });
       const responseData = await response.json();
       setLoadedReviews(responseData.reviews);
     }
