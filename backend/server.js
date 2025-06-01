@@ -13,6 +13,8 @@ const { PrismaClient } = require('./generated/prisma/client');
 const { logActivity } = require('./utils/logActivity');
 const { detectSuspiciousActivity } = require('./utils/monitorLogs');
 const cron = require('node-cron');
+const jwt = require('jsonwebtoken');
+const auth = require('./utils/auth')
 uuidv4();
 
 cron.schedule('*/1 * * * *', detectSuspiciousActivity);
@@ -70,9 +72,9 @@ app.get('/', (req, res, next) => {
     res.status(200).send("Backend is Working!");
 });
 
-app.get('/reviews/:username', async (req, res) => {
+app.get('/reviews', auth, async (req, res) => {
     const { page, limit, sort, titleFilter, dateFilter } = req.query;
-    const { username } = req.params;
+    const { username } = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -126,8 +128,8 @@ app.get('/reviews/:username', async (req, res) => {
     res.status(200).json({ reviews: responseReviews });
 });
 
-app.get('/reviews/:username/lowestRating', async (req, res) => {
-    const { username } = req.params;
+app.get('/reviews/lowestRating', auth, async (req, res) => {
+    const { username } = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -140,8 +142,8 @@ app.get('/reviews/:username/lowestRating', async (req, res) => {
     else res.status(200).json({ lowestRating: reviews.reduce((min, review) => Math.min(min, review.rating), 5) });
 });
 
-app.get('/reviews/:username/highestRating', async (req, res) => {
-    const { username } = req.params;
+app.get('/reviews/highestRating', auth, async (req, res) => {
+    const { username } = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -154,8 +156,8 @@ app.get('/reviews/:username/highestRating', async (req, res) => {
     else res.status(200).json({ highestRating: reviews.reduce((max, review) => Math.max(max, review.rating), 1) });
 });
 
-app.post('/reviews/:username', upload.single("media"), async (req, res) => {
-    const { username } = req.params;
+app.post('/reviews/:username', upload.single("media"), auth, async (req, res) => {
+    const { username } = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: { id: true }
@@ -188,8 +190,9 @@ app.post('/reviews/:username', upload.single("media"), async (req, res) => {
     res.status(201).json({ message: 'Created new review.', review: createdReview});
 });
 
-app.put('/reviews/:username/:id', async (req, res) => {
-    const { username, id } = req.params;
+app.put('/reviews/:id', auth, async (req, res) => {
+    const { username } = req.user.username; 
+    const { id } = req.params;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -221,8 +224,9 @@ app.put('/reviews/:username/:id', async (req, res) => {
 
 });
 
-app.delete('/reviews/:username/:id', async (req, res) => {
-    const { username, id } = req.params;
+app.delete('/reviews/:id', auth, async (req, res) => {
+    const { username } = req.user.username; 
+    const { id } = req.params;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -252,16 +256,22 @@ app.delete('/reviews/:username/:id', async (req, res) => {
 
 });
 
-app.get('/users/:username', async (req, res) => {
-    const { username } = req.params;
-    const { password } = req.query;
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
     const user = await prisma.user.findUnique({ where: { username: username, password: password } });
     if (! user)
-      return res.status(404).json({ message: 'Invalid username or password.' });
-    else res.status(200).json({ message: 'User found.', userInfo: user});
+      return res.status(404).json({ message: 'Invalid credentials.' });
+    else {
+      const token = jwt.sign(
+        { userId: user.id, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+      res.status(200).json({ token, message: 'User found.', userInfo: user});
+    }
 });
 
-app.post('/users', async (req, res) => {
+app.post('/register', async (req, res) => {
     const { email, username, password, role } = req.body;
     try {
         const response = await prisma.user.create({
@@ -274,7 +284,13 @@ app.post('/users', async (req, res) => {
           }
         });
 
-        res.status(201).json({ message: 'User successfully added.', userInfo: response });
+        const token = jwt.sign(
+            { userId: response.id, username: response.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.status(201).json({ token, message: 'User successfully added.', userInfo: response });
     }
     catch (error) {
         res.status(422).json({ message: 'There is an already existing user with the same email or username.' }); 
@@ -305,6 +321,5 @@ app.get('/statisticalQuery', async (req, res) => {
     
     res.status(200).json({ stats: users }); 
 });
-
 
 module.exports = server;

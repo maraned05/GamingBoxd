@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { UserProvider } from './contexts/UserContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 import './index.css';
 import App from './App';
@@ -9,8 +9,8 @@ import App from './App';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-      <UserProvider>
+      <AuthProvider>
         <App />
-      </UserProvider>
+      </AuthProvider>
     </React.StrictMode>
 );

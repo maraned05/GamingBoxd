@@ -13,8 +13,8 @@ import OpenStatisticsButton from "../components/ControlsButtons/OpenStatisticsBu
 import SearchBarDate from "../components/SearchBar/SearchBarDate";
 import { useConnectivityStatus } from '../hooks/useConnectivityStatus';
 import { BACKEND_URL } from '../config';
-import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function MainPage (props) {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -22,7 +22,7 @@ function MainPage (props) {
     const [isSorted, setIsSorted] = useState(false);
     const [editFormContent, setEditFormContent] = useState();
     const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
-    const { user, setUser } = useUser();
+    const { user, logout } = useAuth();
     const [userOpen, setUserOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -100,8 +100,7 @@ function MainPage (props) {
     }
 
     const handleLogout = () => {
-        setUser(null);
-        localStorage.removeItem("user");
+        logout();
         navigate("/");
     };
 

@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useUser } from "../contexts/UserContext";
 import { BACKEND_URL } from '../config';
+import { useAuth } from '../contexts/AuthContext';
 import './LoginRegisterPage.css';
 
 function LoginPage (props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const { setUser } = useUser();
+    const { login } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             let hasError = false;
-            const response = await fetch(`${BACKEND_URL}/users/${username}?password=${password}`, {
+            const response = await fetch(`${BACKEND_URL}/login`, {
+                method: POST,
                 headers: {
-                    'ngrok-skip-browser-warning': 'true'
+                    'Content-Type': 'application/json'
                 },
+                body : JSON.stringify({username, password})
             });
             if (! response.ok)
                 hasError = true;
@@ -26,8 +28,8 @@ function LoginPage (props) {
             if (hasError)
                 throw new Error(responseData.message);
 
-            setUser(responseData.userInfo);
-            navigate("/mainPage");
+            login(responseData.userInfo, responseData.token);
+            navigate("/");
         }
         catch (error) {
             alert(error.message);
@@ -55,7 +57,7 @@ function LoginPage (props) {
                 <button type="submit">Login</button>
             </form>
             <p>
-                Don't have an account? <Link to="/registerPage">Register</Link>
+                Don't have an account? <Link to="/register">Register</Link>
             </p>
         </div>
     );

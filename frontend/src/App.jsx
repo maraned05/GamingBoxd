@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './pages/MainPage'; 
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -11,7 +11,8 @@ import { BACKEND_URL } from './config';
 import ReviewMediaPage from './pages/ReviewMediaPage';
 import { queueOperation, syncPendingOperations } from './syncOperations';
 import {formDataToSerializable, objectToFormData} from './formdataSerialization';
-import { useUser } from "./contexts/UserContext";
+import { useAuth } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   const [loadedReviews, setLoadedReviews] = useState([]);
@@ -20,7 +21,7 @@ function App() {
   const [highestRating, setHighestRating] = useState(null);
 
   const {isOnline, backendStatus} = useConnectivityStatus(BACKEND_URL);
-  const { user } = useUser();
+  const { user, login, authHeader } = useAuth();
   
   // useEffect(() => {
   //   if (isOnline && backendStatus === 'ok')
@@ -36,7 +37,12 @@ function App() {
 
   const fetchPaginatedReviews = async (page) => {
       setIsLoading(true);
-      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}?page=${page}&limit=8`);
+      const response = await fetch(`${BACKEND_URL}/reviews?page=${page}&limit=8`, {
+        method: GET,
+        headers: {
+          authHeader
+        }
+      });
       const responseData = await response.json();
 
       if (responseData.reviews.length === 0) {
@@ -67,7 +73,12 @@ function App() {
       setIsLoading(true);
       try {
         let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}`);
+        const response = await fetch(`${BACKEND_URL}/reviews`, {
+          method: GET,
+          headers: {
+            authHeader
+          }
+        });
 
         if (! response.ok)
             hasError = true;
@@ -85,18 +96,28 @@ function App() {
   };
 
   const fetchHighestRating = async () => {
-    const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/highestRating`);
+    const response = await fetch(`${BACKEND_URL}/reviews/highestRating`, {
+      method: GET,
+      headers: {
+        authHeader
+      }
+    });
     const responseData = await response.json();
     setHighestRating(responseData.highestRating);
   };
 
   const fetchLowestRating = async () => {
-    const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/lowestRating`);
+    const response = await fetch(`${BACKEND_URL}/reviews/lowestRating`, {
+      method: GET,
+      headers: {
+        authHeader
+      }
+    });
     const responseData = await response.json();
     setLowestRating(responseData.lowestRating);
   };
 
-  useEffect(() => {
+  useEffect(() => { 
       if (user) {
         fetchReviews();
         fetchHighestRating();
@@ -116,8 +137,11 @@ const addReviewHandler = async (reviewData) => {
         newProduct.append("media", reviewData.media);
       }
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}`, {
+      const response = await fetch(`${BACKEND_URL}/reviews`, {
         method: 'POST',
+        headers: {
+          authHeader
+        },
         body: newProduct
       });
 
@@ -156,10 +180,11 @@ const addReviewHandler = async (reviewData) => {
       console.log("inside edit " + reviewData.id);
       try {
         let hasError = false;
-        const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/${reviewData.id}`, {
+        const response = await fetch(`${BACKEND_URL}/reviews/${reviewData.id}`, {
           method: 'PUT',
           body: JSON.stringify(reviewData),
           headers: {
+            authHeader,
             'Content-Type': 'application/json'
           }
         });
@@ -193,8 +218,11 @@ const addReviewHandler = async (reviewData) => {
   const deleteReviewHandler = async (reviewID) => {
     try {
       let hasError = false;
-      const response = await fetch(`${BACKEND_URL}/reviews/${user.username}/${reviewID}`, {
-        method: 'DELETE'
+      const response = await fetch(`${BACKEND_URL}/reviews/${reviewID}`, {
+        method: 'DELETE',
+        headers: {
+          authHeader
+        }
       });
 
       if (!response.ok) {
@@ -255,18 +283,17 @@ const addReviewHandler = async (reviewData) => {
   };
 
   return (
-      <BrowserRouter>
-          <Routes>
-            <Route path='/' element = {<LoginPage />} />
-            <Route path='/registerPage' element = {<RegisterPage />} />
-            <Route path='/mainPage' element = {
-                isLoading ? <MainPage reviewsList = {[]} /> 
-                :
-                !user ? 
-                <div style={{width: 700, height: 700, textAlign: 'center', fontSize: 30}}>
-                  Authorization denied!
-                </div>
-                :
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
                 <MainPage reviewsList = {loadedReviews} 
                   onAddReview = {addReviewHandler} 
                   onEditReview = {editReviewHandler} 
@@ -278,14 +305,41 @@ const addReviewHandler = async (reviewData) => {
                   highestRating = {highestRating} 
                   lowestRating = {lowestRating} 
                 />
-              } 
-            />
-            <Route path='/statistics' element = {<StatisticsPage  />}/>
-            <Route path='/reviewMedia/*' element = {<ReviewMediaPage  />}/>
-            <Route path='/adminDashboard' element = {<AdminDashboard  />}/>
-          </Routes>
-      </BrowserRouter>
-    );
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/statistics"
+            element={
+              <ProtectedRoute>
+                <StatisticsPage  />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reviewMedia/*"
+            element={
+              <ProtectedRoute>
+                <ReviewMediaPage  />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/adminDashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard  />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Router>
+  );
 }
 
 export default App;

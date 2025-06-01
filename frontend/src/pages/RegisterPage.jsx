@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../contexts/UserContext";
 import { BACKEND_URL } from '../config';
+import { useAuth } from '../contexts/AuthContext';
 import './LoginRegisterPage.css';
 
 function RegisterPage (props) {
@@ -9,15 +9,15 @@ function RegisterPage (props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("user");
-    const { setUser } = useUser();
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
             const userData = { email, username, password, role };
             let hasError = false;
-            const response = await fetch(`${BACKEND_URL}/users`, {
+            const response = await fetch(`${BACKEND_URL}/register`, {
                 method: 'POST',
                 body: JSON.stringify(userData),
                 headers: {
@@ -31,8 +31,8 @@ function RegisterPage (props) {
             if (hasError)
                 throw new Error(responseData.message);
 
-            setUser(responseData.userInfo);
-            navigate("/mainPage");
+            login(responseData.userInfo, responseData.token);
+            navigate("/");
         }
         catch (error) {
             alert(error.message);
