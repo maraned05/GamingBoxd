@@ -34,17 +34,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
     };
 
-    const authHeader = () => {
-        const token = localStorage.getItem('token');
-        return token ? { Authorization: `Bearer ${token}` } : {};
-    }
-
     const value = {
         user,
         token,
         login,
         logout,
-        authHeader,
         loading
     };
 

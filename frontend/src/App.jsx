@@ -12,6 +12,7 @@ import ReviewMediaPage from './pages/ReviewMediaPage';
 import { queueOperation, syncPendingOperations } from './syncOperations';
 import {formDataToSerializable, objectToFormData} from './formdataSerialization';
 import { useAuth } from './contexts/AuthContext';
+import { authService } from './services/authService';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
       const response = await fetch(`${BACKEND_URL}/reviews?page=${page}&limit=8`, {
         method: 'GET',
         headers: {
-          authHeader
+          ...authService.getAuthHeader()
         }
       });
       const responseData = await response.json();
@@ -76,7 +77,7 @@ function App() {
         const response = await fetch(`${BACKEND_URL}/reviews`, {
           method: 'GET',
           headers: {
-            authHeader
+            ...authService.getAuthHeader()
           }
         });
 
@@ -99,7 +100,7 @@ function App() {
     const response = await fetch(`${BACKEND_URL}/reviews/highestRating`, {
       method: 'GET',
       headers: {
-        authHeader
+        ...authService.getAuthHeader()
       }
     });
     const responseData = await response.json();
@@ -110,7 +111,7 @@ function App() {
     const response = await fetch(`${BACKEND_URL}/reviews/lowestRating`, {
       method: 'GET',
       headers: {
-        authHeader
+        ...authService.getAuthHeader()
       }
     });
     const responseData = await response.json();
@@ -140,7 +141,7 @@ const addReviewHandler = async (reviewData) => {
       const response = await fetch(`${BACKEND_URL}/reviews`, {
         method: 'POST',
         headers: {
-          authHeader
+          ...authService.getAuthHeader()
         },
         body: newProduct
       });
@@ -184,7 +185,7 @@ const addReviewHandler = async (reviewData) => {
           method: 'PUT',
           body: JSON.stringify(reviewData),
           headers: {
-            authHeader,
+            ...authService.getAuthHeader(),
             'Content-Type': 'application/json'
           }
         });
@@ -221,7 +222,7 @@ const addReviewHandler = async (reviewData) => {
       const response = await fetch(`${BACKEND_URL}/reviews/${reviewID}`, {
         method: 'DELETE',
         headers: {
-          authHeader
+          ...authService.getAuthHeader()
         }
       });
 

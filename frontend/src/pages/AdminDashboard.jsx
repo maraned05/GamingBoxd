@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./AdminDashboard.css"
 import { BACKEND_URL } from '../config';
 import { useAuth } from "../contexts/AuthContext";
+import { authService } from "../services/authService";
 
 function AdminDashboard () {
     const [monitoredUsers, setMonitoredUsers] = useState([]);
     //const [error, setError] = useState(null);
-    const { user, authHeader } = useAuth();
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchMonitoredUsers = async () => {
@@ -15,7 +16,7 @@ function AdminDashboard () {
                     const response = await fetch(`${BACKEND_URL}/admin/monitoredUsers`, {
                       method: 'GET',
                       headers: {
-                        authHeader
+                        ...authService.getAuthHeader()
                       }
                     });
                     console.log(response);
