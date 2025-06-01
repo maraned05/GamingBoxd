@@ -38,7 +38,7 @@ function App() {
   const fetchPaginatedReviews = async (page) => {
       setIsLoading(true);
       const response = await fetch(`${BACKEND_URL}/reviews?page=${page}&limit=8`, {
-        method: GET,
+        method: 'GET',
         headers: {
           authHeader
         }
@@ -74,7 +74,7 @@ function App() {
       try {
         let hasError = false;
         const response = await fetch(`${BACKEND_URL}/reviews`, {
-          method: GET,
+          method: 'GET',
           headers: {
             authHeader
           }
@@ -97,7 +97,7 @@ function App() {
 
   const fetchHighestRating = async () => {
     const response = await fetch(`${BACKEND_URL}/reviews/highestRating`, {
-      method: GET,
+      method: 'GET',
       headers: {
         authHeader
       }
@@ -108,7 +108,7 @@ function App() {
 
   const fetchLowestRating = async () => {
     const response = await fetch(`${BACKEND_URL}/reviews/lowestRating`, {
-      method: GET,
+      method: 'GET',
       headers: {
         authHeader
       }

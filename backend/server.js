@@ -297,8 +297,8 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.get('/admin/:username/monitoredUsers', async (req, res) => {
-    const { username } = req.params;
+app.get('/admin/monitoredUsers', auth, async (req, res) => {
+    const { username } = req.user.username;
     const user = await prisma.user.findUnique({ 
       where: { username: username }
     }); 

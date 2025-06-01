@@ -15,7 +15,7 @@ function LoginPage (props) {
         try {
             let hasError = false;
             const response = await fetch(`${BACKEND_URL}/login`, {
-                method: POST,
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
