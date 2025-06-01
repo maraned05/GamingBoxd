@@ -74,7 +74,7 @@ app.get('/', (req, res, next) => {
 
 app.get('/reviews', auth, async (req, res) => {
     const { page, limit, sort, titleFilter, dateFilter } = req.query;
-    const { username } = req.user.username;
+    const username = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -129,7 +129,7 @@ app.get('/reviews', auth, async (req, res) => {
 });
 
 app.get('/reviews/lowestRating', auth, async (req, res) => {
-    const { username } = req.user.username;
+    const username = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -143,7 +143,7 @@ app.get('/reviews/lowestRating', auth, async (req, res) => {
 });
 
 app.get('/reviews/highestRating', auth, async (req, res) => {
-    const { username } = req.user.username;
+    const username = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: {id: true}
@@ -157,7 +157,7 @@ app.get('/reviews/highestRating', auth, async (req, res) => {
 });
 
 app.post('/reviews/:username', upload.single("media"), auth, async (req, res) => {
-    const { username } = req.user.username;
+    const username = req.user.username;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
         select: { id: true }
@@ -191,7 +191,7 @@ app.post('/reviews/:username', upload.single("media"), auth, async (req, res) =>
 });
 
 app.put('/reviews/:id', auth, async (req, res) => {
-    const { username } = req.user.username; 
+    const username = req.user.username; 
     const { id } = req.params;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
@@ -225,7 +225,7 @@ app.put('/reviews/:id', auth, async (req, res) => {
 });
 
 app.delete('/reviews/:id', auth, async (req, res) => {
-    const { username } = req.user.username; 
+    const username = req.user.username; 
     const { id } = req.params;
     const user = await prisma.user.findUnique({ 
         where: { username: username }, 
@@ -298,7 +298,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/admin/monitoredUsers', auth, async (req, res) => {
-    const { username } = req.user.username;
+    const username = req.user.username;
     const user = await prisma.user.findUnique({ 
       where: { username: username }
     }); 
