@@ -5,13 +5,13 @@ const transporter = nodemailer.createTransport({
   port: 2525,
   auth: {
     user: "5a18a4e54c82bc",
-    pass: "****a8d0"
+    pass: "a68a03bcdba8d0"
   }
 });
 
 const sendVerificationEmail = async (email, code) => {
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: "MPP App",
         to: email,
         subject: 'Your 2FA Verification Code',
         html: `
