@@ -99,6 +99,10 @@ function MainPage (props) {
         window.open("/statistics", "_blank");
     }
 
+    const handle2FA = () => {
+        window.open("/settings/2fa");
+    };
+
     const handleLogout = () => {
         logout();
         navigate("/");
@@ -115,6 +119,7 @@ function MainPage (props) {
             {userOpen && (
                 <div className="user-dropdown">
                     <p className="username">Logged in as: <strong>{user.username}</strong></p>
+                    <button className="2fa-btn" onClick={handle2FA}>2FA Settings</button>
                     <button className="logout-btn" onClick={handleLogout}>Logout</button>
                     {user && user.role == 'admin' && (
                         <button className="dashboard-btn" onClick={openAdminDashboard}>Admin Dashboard</button>

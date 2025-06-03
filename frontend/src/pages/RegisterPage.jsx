@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
-import './LoginRegisterPage.css';
+import './AuthenticationPages.css';
 
 function RegisterPage (props) {
     const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ function RegisterPage (props) {
         try {
             const userData = { email, username, password, role };
             let hasError = false;
-            const response = await fetch(`${BACKEND_URL}/register`, {
+            const response = await fetch(`${BACKEND_URL}/auth/register`, {
                 method: 'POST',
                 body: JSON.stringify(userData),
                 headers: {
@@ -42,7 +42,7 @@ function RegisterPage (props) {
     return (
         <div className="loginContainer">
           <h2>Register</h2>
-          <form onSubmit={handleRegister} className="form">
+          <form onSubmit={handleRegister}>
             <input
                 type="email"
                 placeholder="Email"

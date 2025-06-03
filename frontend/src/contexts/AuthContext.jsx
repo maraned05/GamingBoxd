@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token'));
-    const [loading, setLoading] = useState(true);
+    const [tempToken, setTempToken] = useState(localStorage.getItem('tempToken'));
 
     useEffect(() => {
         // Check if we have a token on mount
@@ -16,30 +16,36 @@ export const AuthProvider = ({ children }) => {
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
         }
-        setLoading(false);
     }, []);
+
+    const setTemporaryToken = (tempAuthToken) => {
+        setTempToken(tempAuthToken);
+        localStorage.setItem('tempToken', tempAuthToken);
+    };
 
     const login = (userData, token) => {
         setUser(userData);
         setToken(token);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userData));
-        console.log(`inside login ~ token: ${token}, user: ${userData}`);
     };
 
     const logout = () => {
         setUser(null);
         setToken(null);
+        setTempToken(null);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('tempToken');
     };
 
     const value = {
         user,
         token,
+        tempToken,
         login,
         logout,
-        loading
+        setTemporaryToken
     };
 
     return (

@@ -15,6 +15,8 @@ const { detectSuspiciousActivity } = require('./utils/monitorLogs');
 const cron = require('node-cron');
 const jwt = require('jsonwebtoken');
 const auth = require('./utils/auth')
+const { sendVerificationEmail } = require('./utils/emailService');
+const speakeasy = require('speakeasy');
 uuidv4();
 
 cron.schedule('*/1 * * * *', detectSuspiciousActivity);
@@ -256,22 +258,39 @@ app.delete('/reviews/:id', auth, async (req, res) => {
 
 });
 
-app.post('/login', async (req, res) => {
+app.post('/auth/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await prisma.user.findUnique({ where: { username: username, password: password } });
     if (! user)
       return res.status(404).json({ message: 'Invalid credentials.' });
     else {
-      const token = jwt.sign(
-        { userId: user.id, username: user.username },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      res.status(200).json({ token, message: 'User found.', userInfo: user});
+      if (user.twoFactorEnabled) {
+          const verificationCode = speakeasy.totp({
+                secret: user.twoFactorSecret,
+                encoding: 'base32'
+            });
+
+          await sendVerificationEmail(user.email, verificationCode);
+
+          const tempToken = jwt.sign(
+            { userId: user.id, temp: true },
+            process.env.JWT_SECRET,
+            { expiresIn: '10m' }
+          );
+          res.status(200).json({ tempToken, requiresTwoFactor: true, message: '2FA required.'});
+      }
+      else {
+          const token = jwt.sign(
+            { userId: user.id, username: user.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+          );
+          res.status(200).json({ token, message: 'User found.', userInfo: user});
+      }
     }
 });
 
-app.post('/register', async (req, res) => {
+app.post('/auth/register', async (req, res) => {
     const { email, username, password, role } = req.body;
     try {
         const response = await prisma.user.create({
@@ -295,6 +314,130 @@ app.post('/register', async (req, res) => {
     catch (error) {
         res.status(422).json({ message: 'There is an already existing user with the same email or username.' }); 
     }
+});
+
+app.post('/auth/enable-2fa', auth, async (req, res) => {
+    try {
+        const { userId } = req.user; // From auth middleware
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Generate new secret
+        const secret = speakeasy.generateSecret({
+            length: 20
+        });
+
+        // Update user with new secret
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                twoFactorSecret: secret.base32,
+                twoFactorEnabled: true
+            }
+        });
+
+        // // Send verification code
+        // const verificationCode = speakeasy.totp({
+        //     secret: secret.base32,
+        //     encoding: 'base32'
+        // });
+
+        // await sendVerificationEmail(user.email, verificationCode);
+
+        res.json({
+            message: '2FA enabled. Please verify with the code sent to your email.',
+            // secret: secret.base32
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error enabling 2FA' });
+    }
+});
+
+app.post('/disable-2fa', auth, async (req, res) => {
+    try {
+        const { userId } = req.user; // From auth middleware
+        // const { code } = req.body;
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Verify current code before disabling
+        // const isValid = speakeasy.totp.verify({
+        //     secret: user.twoFactorSecret,
+        //     encoding: 'base32',
+        //     token: code,
+        //     window: 1
+        // });
+
+        // if (!isValid) {
+        //     return res.status(401).json({ error: 'Invalid verification code' });
+        // }
+
+        // Disable 2FA
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                twoFactorSecret: null,
+                twoFactorEnabled: false
+            }
+        });
+
+        res.json({ message: '2FA disabled successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error disabling 2FA' });
+    }
+});
+
+app.post('/auth/verify-2fa', auth, async (req, res) => {
+    try {
+        const { code } = req.body;
+
+        if (!req.user.temp) {
+            return res.status(401).json({ error: 'Invalid token' });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: decoded.userId }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Verify 2FA code
+        const isValid = speakeasy.totp.verify({
+            secret: user.twoFactorSecret,
+            encoding: 'base32',
+            token: code,
+            window: 1 // Allow 30 seconds clock skew
+        });
+
+        if (!isValid) {
+            return res.status(401).json({ error: 'Invalid verification code' });
+        }
+
+        // Generate final token
+        const token = jwt.sign(
+            { userId: user.id, username: user.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.json({ token, userInfo: user });
+      } catch (error) {
+          res.status(500).json({ error: 'Error verifying 2FA' });
+      }
 });
 
 app.get('/admin/monitoredUsers', auth, async (req, res) => {

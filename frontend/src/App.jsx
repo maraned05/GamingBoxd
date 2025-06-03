@@ -14,6 +14,8 @@ import {formDataToSerializable, objectToFormData} from './formdataSerialization'
 import { useAuth } from './contexts/AuthContext';
 import { authService } from './services/authService';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { TwoFactorSettings } from './pages/TwoFactorSettings';
+import { TwoFactorVerification } from './pages/TwoFactorVerification';
 
 function App() {
   const [loadedReviews, setLoadedReviews] = useState([]);
@@ -350,6 +352,24 @@ const addReviewHandler = async (reviewData) => {
                 <AdminDashboard  />
               </ProtectedRoute>
             }
+          />
+
+          <Route 
+            path="/login/2fa" 
+            element={
+              <ProtectedRoute>
+                  <TwoFactorVerification  />
+              </ProtectedRoute>
+              } 
+          />
+
+          <Route 
+            path="/settings/2fa" 
+            element={
+              <ProtectedRoute>
+                  <TwoFactorSettings />
+              </ProtectedRoute>
+              } 
           />
 
           <Route path="*" element={<Navigate to="/" />} />

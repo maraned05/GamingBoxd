@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { BACKEND_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
-import './LoginRegisterPage.css';
+import './AuthenticationPages.css';
 
 function LoginPage (props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, setTemporaryToken } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             let hasError = false;
-            const response = await fetch(`${BACKEND_URL}/login`, {
+            const response = await fetch(`${BACKEND_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,8 +28,14 @@ function LoginPage (props) {
             if (hasError)
                 throw new Error(responseData.message);
 
-            login(responseData.userInfo, responseData.token);
-            navigate("/");
+            if (responseData.requiresTwoFactor) {
+                setTemporaryToken(responseData.tempToken);
+                navigate('/login/2fa');
+            } 
+            else {
+                login(responseData.userInfo, responseData.token);
+                navigate("/");
+            }
         }
         catch (error) {
             alert(error.message);
@@ -39,7 +45,7 @@ function LoginPage (props) {
     return (
         <div className="loginContainer">
             <h2>Login</h2>
-            <form onSubmit={handleLogin} className="form">
+            <form onSubmit={handleLogin}>
                 <input
                     type="text"
                     placeholder="Username"
