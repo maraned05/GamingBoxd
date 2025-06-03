@@ -96,11 +96,11 @@ function MainPage (props) {
     }
 
     function openStatisticsPage () {
-        window.open("/statistics", "_blank");
+        navigate("/statistics", "_blank");
     }
 
     const handle2FA = () => {
-        window.open("/settings/2fa");
+        navigate("/settings/2fa");
     };
 
     const handleLogout = () => {
@@ -109,7 +109,7 @@ function MainPage (props) {
     };
 
     const openAdminDashboard = () => {
-        window.open("/adminDashboard");
+        navigate("/adminDashboard");
     }
 
     return (

@@ -330,9 +330,7 @@ const addReviewHandler = async (reviewData) => {
           <Route
             path="/statistics"
             element={
-              <ProtectedRoute>
-                <StatisticsPage  />
-              </ProtectedRoute>
+              <StatisticsPage  />
             }
           />
 
@@ -357,9 +355,9 @@ const addReviewHandler = async (reviewData) => {
           <Route 
             path="/login/2fa" 
             element={
-              <ProtectedRoute>
+                <ProtectedRoute>
                   <TwoFactorVerification  />
-              </ProtectedRoute>
+                </ProtectedRoute>
               } 
           />
 
@@ -367,8 +365,8 @@ const addReviewHandler = async (reviewData) => {
             path="/settings/2fa" 
             element={
               <ProtectedRoute>
-                  <TwoFactorSettings />
-              </ProtectedRoute>
+                  <TwoFactorSettings  />
+                </ProtectedRoute>
               } 
           />
 

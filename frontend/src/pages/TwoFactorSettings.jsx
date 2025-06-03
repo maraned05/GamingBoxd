@@ -18,7 +18,7 @@ export const TwoFactorSettings = () => {
             const response = await fetch(`${BACKEND_URL}/auth/enable-2fa`, {
                 method: 'POST',
                 headers: {
-                    ...this.getAuthHeader(),
+                    ...authService.getAuthHeader(),
                     'Content-Type': 'application/json',
                 },
             });
@@ -45,7 +45,7 @@ export const TwoFactorSettings = () => {
             const response = await fetch(`${API_URL}/api/auth/disable-2fa`, {
                 method: 'POST',
                 headers: {
-                    ...this.getAuthHeader(),
+                    ...authService.getAuthHeader(),
                     'Content-Type': 'application/json',
                 },
                 //body: JSON.stringify({ verificationCode }),
