@@ -29,7 +29,7 @@ export const TwoFactorVerification = () => {
             const responseData = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Failed to verify code');
+                throw new Error(responseData.error || 'Failed to verify code');
             }
 
             login(responseData.userInfo, responseData.token);
