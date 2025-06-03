@@ -355,9 +355,7 @@ const addReviewHandler = async (reviewData) => {
           <Route 
             path="/login/2fa" 
             element={
-                <ProtectedRoute>
-                  <TwoFactorVerification  />
-                </ProtectedRoute>
+                <TwoFactorVerification  />
               } 
           />
 
