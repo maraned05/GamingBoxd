@@ -270,7 +270,11 @@ app.post('/auth/login', async (req, res) => {
                 encoding: 'base32'
             });
 
-          await sendVerificationEmail(user.email, verificationCode);
+          const emailSent = await sendVerificationEmail(user.email, verificationCode);
+
+          if (!emailSent) {
+              console.log('Failed to send verification email');
+          }
 
           const tempToken = jwt.sign(
             { userId: user.id, temp: true },
